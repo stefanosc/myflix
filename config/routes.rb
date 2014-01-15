@@ -3,5 +3,5 @@ Myflix::Application.routes.draw do
 
   root to: 'videos#index'
 
-  resources :vieeo
+  resources :videos
 end
