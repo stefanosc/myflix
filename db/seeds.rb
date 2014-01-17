@@ -9,12 +9,32 @@
 6.times do
   Video.create(title: "Monk", 
               description: "This is the best monk movie. Enjoy your membership", 
-              small_cover_url: "public/tmp/monk.jpg", 
-              large_cover_url: "public/tmp/monk_large.jpg")
+              small_cover_url: "/tmp/monk.jpg", 
+              large_cover_url: "/tmp/monk_large.jpg")
 
   Video.create(title: "Family Guy", 
               description: "This is the best Family Guy movie. Enjoy your membership", 
-              small_cover_url: "public/tmp/family_guy.jpg", 
-              large_cover_url: "public/tmp/monk_large.jpg")
+              small_cover_url: "/tmp/family_guy.jpg", 
+              large_cover_url: "/tmp/monk_large.jpg")
 
+end
+
+# category = ["Love", "Wisdom", "Benefit", "Blis"]
+
+# 4.times do |i|
+#   c = Category.new 
+#   c.name = category[i]
+#   c.description = "In this category you will find the most beautiful #{category[i].downcase} movies"
+#   c.save
+# end
+
+i = 1
+
+Video.all.each do |v|
+  v.category_id = i
+  v.save
+  i+=1
+  if i > 4
+    i = 1
+  end 
 end

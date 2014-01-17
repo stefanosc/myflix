@@ -1,6 +1,6 @@
 class VideosController < ApplicationController
 
-  before_action :set_video, only: [:show]
+  before_action :find_video, only: [:show]
 
   def index
     @videos = Video.limit(6)    
@@ -12,8 +12,8 @@ class VideosController < ApplicationController
   
   private
 
-  def set_video
-    @video = Video.find(params[:id])
+  def find_video
+    @video = Video.find_by_slug(params[:id])
   end
 
 end

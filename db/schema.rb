@@ -11,13 +11,14 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20140115182053) do
+ActiveRecord::Schema.define(version: 20140116222928) do
 
   create_table "categories", force: true do |t|
     t.string   "name"
     t.text     "description"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.string   "slug"
   end
 
   create_table "videos", force: true do |t|
@@ -27,6 +28,8 @@ ActiveRecord::Schema.define(version: 20140115182053) do
     t.string   "large_cover_url"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.integer  "category_id"
+    t.string   "slug"
   end
 
 end
