@@ -13,7 +13,6 @@ module Sluggable
     obj = self.class.where(slug: str).first
     str2 = str
     while obj && obj != self
-      str2 = str
       str2 = str + "-" + count.to_s
       obj = self.class.where(slug: str2).first
       count += 1
