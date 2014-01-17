@@ -3,7 +3,7 @@ class VideosController < ApplicationController
   before_action :find_video, only: [:show]
 
   def index
-    @videos = Video.limit(6)    
+    @categories = Category.all    
   end  
 
   def show
