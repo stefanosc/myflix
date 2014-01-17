@@ -6,7 +6,7 @@
 #   cities = City.create([{ name: 'Chicago' }, { name: 'Copenhagen' }])
 #   Mayor.create(name: 'Emanuel', city: cities.first)
 
-6.times do
+12.times do
   Video.create(title: "Monk", 
               description: "This is the best monk movie. Enjoy your membership", 
               small_cover_url: "/tmp/monk.jpg", 
@@ -19,14 +19,14 @@
 
 end
 
-# category = ["Love", "Wisdom", "Benefit", "Blis"]
+category = ["Love", "Action", "Sci-Fi", "Fantasy"]
 
-# 4.times do |i|
-#   c = Category.new 
-#   c.name = category[i]
-#   c.description = "In this category you will find the most beautiful #{category[i].downcase} movies"
-#   c.save
-# end
+4.times do |i|
+  c = Category.new 
+  c.name = category[i]
+  c.description = "In this category you will find the most beautiful #{category[i].downcase} movies"
+  c.save
+end
 
 i = 1
 
