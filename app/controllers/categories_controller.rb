@@ -11,6 +11,6 @@ class CategoriesController < ApplicationController
 
   private
   def find_category
-    @category = Categories.find_by_slug(params[:id]) if params[:id]
+    @category = Category.find_by_slug(params[:id]) if params[:id]
   end
 end
