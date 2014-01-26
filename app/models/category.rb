@@ -4,7 +4,7 @@ class Category < ActiveRecord::Base
 
   sluggable_column :name
 
-  has_many :videos
+  has_many :videos,  -> {order('created_at desc')}
 
   private
     
