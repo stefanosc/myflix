@@ -1,43 +1,44 @@
 require 'spec_helper'
 
 describe Video do
-  it "saves itself" do
-    c = Category.create(name: "test1", description: "the best Category")    
-    v = Video.new(title: "first monk", description: "this is a monk movie", category: c, small_cover_url: "/tmp/monk.jpg", large_cover_url: "/tmp/monk_large.jpg")
-    v.save
-    Video.first.title.should == "first monk"
-  end
 
-  it "belongs to a category" do
-    c = Category.create(name: "test1", description: "the best Category")
-    v = Video.create(title: "test video category", description: "this is a monk movie", category: c, small_cover_url: "/tmp/monk.jpg", large_cover_url: "/tmp/monk_large.jpg")
-    expect(Video.first.category).to eq(c)
-  end
+  it { should belong_to(:category)}
 
-  it "fails validation with no title" do
-    expect(Video.create).to have(1).errors_on(:title)
-  end
+  it { should validate_presence_of(:description)}
+  it { should validate_presence_of(:title)}
+  it { should validate_presence_of(:category)}
 
-  it "fails validation with no category" do
-    expect(Video.create).to have(1).errors_on(:category)
-  end
+  describe "::search_by_title" do
+    it "searches by title and returns empty array if not found" do
+      c = Category.create(name: "monk category", description: "category description")
+      v = Video.create(title: "this is a Monk movie", description: "this is the monk description", category: c )
+      expect(Video.search_by_title('not here')).to eq([])
+    end
 
-  it "fails validation with no description" do
-    expect(Video.create).to have(1).errors_on(:description)
-    expect(Video.count).to eq(0)
-  end
+    it "searches by title and returns an array of matches" do
+      c = Category.create(name: "monk category", description: "category description")
+      v = Video.create(title: "this is a monk movie", description: "this is the monk description", category: c )
+      expect(Video.search_by_title('monk')).to eq([v])
+    end
 
-  it "passes validation with on title" do
-    expect(Video.create(title: "Monk")).to have(0).errors_on(:title)
-  end
+    it "searches by title regardless of case and returns an array of matches" do
+      c = Category.create(name: "monk category", description: "category description")
+      v = Video.create(title: "this is a Monk movie", description: "this is the monk description", category: c )
+      expect(Video.search_by_title('monk')).to eq([v])
+    end
 
-  it "fails validation with no category" do
-    c = Category.create(name: "test1", description: "the best Category")
-    expect(Video.create(category: c) ).to have(0).errors_on(:category)
-  end
+    it "returns an empty array if searched for empty string" do
+      c = Category.create(name: "monk category", description: "category description")
+      v = Video.create(title: "this is a Future movie", description: "this is the future description", category: c )
+      expect(Video.search_by_title('')).to eq([])   
+    end
 
-  it "fails validation with no description" do
-    expect(Video.create(description: "the best movie") ).to have(0).errors_on(:description)
-  end
+    it "returns an array of matches ordered by created_at" do
+      c = Category.create(name: "monk category", description: "category description")
+      v = Video.create(title: "this is a Monk movie", description: "this is the monk description", category: c, created_at: 1.day.ago )
+      v1 = Video.create(title: "this is a Future movie", description: "this is the future description", category: c )
+      expect(Video.search_by_title('movie')).to eq([v1, v])         
+    end
 
+  end
 end
