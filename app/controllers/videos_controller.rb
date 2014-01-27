@@ -9,6 +9,12 @@ class VideosController < ApplicationController
   def show
     
   end
+
+  def search
+    @q = params[:q]
+    @videos = []
+    Video.search_by_title(@q).each_slice(6) { |v| @videos << v }
+  end
   
   private
 
