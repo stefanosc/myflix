@@ -1,1 +1,11 @@
-= render @category, description: @category.description
+%article.video_category
+  %header
+    %h3= link_to "#{@category.name}", category_path(category)
+  - if description
+    %p.well= "#{@category.description}"
+  .videos.row  
+    .video.col-sm-2
+      - @category.videos.each do |video|
+        = link_to video_path(video), nil do
+          %img(src="#{video.small_cover_url}")
+
