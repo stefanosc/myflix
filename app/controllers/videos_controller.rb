@@ -1,7 +1,7 @@
 class VideosController < ApplicationController
 
   before_action :find_video, only: [:show]
-  before_action :require_user, only: [:index]
+  before_action :require_user
 
 
   def index

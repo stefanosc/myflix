@@ -1,15 +1,15 @@
 class SessionsController < ApplicationController
 
   def new
-    session[:referer] = request.env["HTTP_REFERER"]
-    redirect_to home_path if current_user    
+    session[:referer] = request.env["HTTP_REFERER"] if session[:referer].nil?
+    redirect_to home_path if current_user 
   end
 
   def create
     user = User.find_by_email(params[:email])
     if user && user.authenticate(params[:password])
       session[:user] = user.id
-      session[:referer] = home_path if session[:referer] == sign_in_path || root_url
+      session[:referer] = home_path if session[:referer] == sign_in_path || session[:referer] == root_path
       redirect_to session[:referer], flash: {success: "You have successfully looged in"}
     else
       flash.now[:danger] = "The Email and Password combination you entered does not match"
