@@ -1,0 +1,6 @@
+%article.video_category
+  %header
+    %h3= @videos.blank? ? "Your search for \"#{@q}\" didn't match any video" : "Your search for \"#{@q}\" matched the following videos:"
+  - @videos.each do |videos|
+    %article.video_category
+      .videos.row= render videos

@@ -1,6 +1,8 @@
 class VideosController < ApplicationController
 
   before_action :find_video, only: [:show]
+  before_action :require_user
+
 
   def index
     @categories = Category.all    
@@ -8,6 +10,12 @@ class VideosController < ApplicationController
 
   def show
     
+  end
+
+  def search
+    @q = params[:q]
+    @videos = []
+    Video.search_by_title(@q).each_slice(6) { |v| @videos << v }
   end
   
   private

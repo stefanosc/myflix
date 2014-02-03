@@ -2,12 +2,14 @@ source 'https://rubygems.org'
 ruby '2.0.0'
 
 gem 'bootstrap-sass'
+gem 'bootstrap_form'
 gem 'coffee-rails'
 gem 'rails'
 gem 'haml-rails'
 gem 'sass-rails'
 gem 'uglifier'
 gem 'jquery-rails'
+gem 'bcrypt-ruby', '~> 3.1.2' 
 
 group :development do
   gem 'sqlite3'
@@ -35,4 +37,5 @@ group :test do
   gem "launchy"
   gem 'shoulda-matchers'
   gem "selenium-webdriver"
+  gem "fivemat"
 end
