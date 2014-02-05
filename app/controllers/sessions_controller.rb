@@ -11,6 +11,7 @@ class SessionsController < ApplicationController
       session[:user] = user.id
       session[:referer] = home_path if session[:referer] == sign_in_path || session[:referer] == root_path
       redirect_to session[:referer], flash: {success: "You have successfully looged in"}
+      session[:referer] = nil
     else
       flash.now[:danger] = "The Email and Password combination you entered does not match"
       render :new
