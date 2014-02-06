@@ -38,4 +38,5 @@ group :test do
   gem 'shoulda-matchers'
   gem "selenium-webdriver"
   gem "fivemat"
+  gem 'fabrication'
 end
