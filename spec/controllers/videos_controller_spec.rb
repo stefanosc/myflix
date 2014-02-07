@@ -1,13 +1,13 @@
 require "spec_helper"
 
 describe VideosController do
-
-  subject { Fabricate{:video} }
+  let(:video) { Fabricate(:video) } 
+  subject {:video}
 
   describe "GET #show" do
     it "assigns the requested video to @video" do
       get :show, id: 1
-      expect(subject).to == video
+      expect(subject).to  eq(video)
     end
     it "renders the :show template" do
 
