@@ -1,8 +1,7 @@
 require "spec_helper"
 
 describe VideosController do
-  let(:video) { Fabricate(:video) } 
-  subject {:video}
+  subject { Fabricate(:video) } 
 
   describe "GET #show" do
     it "assigns the requested video to @video" do
