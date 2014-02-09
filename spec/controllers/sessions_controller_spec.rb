@@ -62,19 +62,19 @@ describe SessionsController do
 
   describe "GET #destroy" do
     let(:user)  { Fabricate(:user) } 
-    it "clears the session user" do
+
+    before(:each) do
       session[:user] = user.id
       get :destroy
+    end
+
+    it "clears the session user" do
       expect(session[:user]).to  be_nil
     end
     it "redirects to root path" do
-      session[:user] = user.id
-      get :destroy
       expect(response).to  redirect_to(root_path)
     end
     it "sets flassh success" do
-      session[:user] = user.id
-      get :destroy
       expect(flash[:success]).not_to be_blank
     end
   end
