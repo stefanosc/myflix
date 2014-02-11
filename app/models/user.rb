@@ -3,6 +3,7 @@ class User < ActiveRecord::Base
   include Sluggable 
 
   sluggable_column :name
+  has_many :reviews
 
   has_secure_password validations: false
   validates_presence_of :password, :name, :email

@@ -5,6 +5,7 @@ class Video < ActiveRecord::Base
   sluggable_column :title
 
   belongs_to :category
+  has_many :reviews
 
   validates_presence_of :title, :description, :category
 

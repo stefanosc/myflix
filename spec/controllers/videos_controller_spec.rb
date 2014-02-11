@@ -3,12 +3,23 @@ require "spec_helper"
 describe VideosController do
 
   let(:video) { Fabricate(:video) }
-
+  let(:user) { Fabricate(:user) }
   describe "GET #show" do
-    it "assigns the requested video to @video for authenticated users" do
-      session[:user] = Fabricate(:user).id
-      get :show, id: video
-      expect(assigns(:video)).to  eq(video)
+    context 'when user is signed in' do
+    
+      it "assigns the requested video to @video" do
+        session[:user] = user.id
+        get :show, id: video
+        expect(assigns(:video)).to  eq(video)
+      end
+      it "assigns the requested video reviews to @reviews" do
+        session[:user] = user.id
+        get :show, id: video
+        review1 = Fabricate(:review, video: video, user: user)
+        review2 = Fabricate(:review, video: video, user: user)
+        expect(assigns(:reviews)).to  include(review2, review1)
+      end
+
     end
   end
 
