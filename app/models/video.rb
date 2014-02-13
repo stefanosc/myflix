@@ -27,5 +27,9 @@ class Video < ActiveRecord::Base
     end
   end
 
+  def recent_reviews
+    reviews.order('created_at DESC').limit(10)
+  end
+
 
 end
