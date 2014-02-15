@@ -5,7 +5,7 @@ class Video < ActiveRecord::Base
   sluggable_column :title
 
   belongs_to :category
-  has_many :reviews
+  has_many :reviews, -> { order 'created_at DESC'}
 
   validates_presence_of :title, :description, :category
 
@@ -26,10 +26,5 @@ class Video < ActiveRecord::Base
       collection
     end
   end
-
-  def recent_reviews
-    reviews.order('created_at DESC').limit(10)
-  end
-
 
 end
