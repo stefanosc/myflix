@@ -4,6 +4,7 @@ describe VideosController do
 
   let(:video) { Fabricate(:video) }
   let(:user) { Fabricate(:user) }
+ 
   describe "GET #show" do
     context 'when user is signed in' do
     
