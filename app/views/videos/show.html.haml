@@ -31,7 +31,7 @@
           = f.submit "submit", {class: "btn"}
           %a(href="") Cancel
       %header
-        %h3 User Reviews (#{@reviews.count})
+        %h3 User Reviews (#{@video.reviews.size})
       %ul
         - @reviews.each do |review|
           %article.review

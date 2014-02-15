@@ -9,7 +9,7 @@ class VideosController < ApplicationController
   end  
 
   def show
-    @reviews = @video.reviews
+    @reviews = @video.recent_reviews
   end
 
   def search

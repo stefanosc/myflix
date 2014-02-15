@@ -27,4 +27,9 @@ class Video < ActiveRecord::Base
     end
   end
 
+  def recent_reviews
+    reviews.limit(10)
+  end
+
+
 end
