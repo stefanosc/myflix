@@ -14,7 +14,7 @@ gem 'bcrypt-ruby', '~> 3.1.2'
 group :development do
   gem 'sqlite3'
   gem 'thin'
-  gem "better_errors"
+  # gem "better_errors"
   gem "binding_of_caller"
 end
 

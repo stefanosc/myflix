@@ -17,13 +17,16 @@
             - @queue_items.each do |item|
               %tr
                 %td
-                  %input.form-control(type="text" value=#{item.position})
+                  %input.form-control{type: "text", value: "#{item.position}" }
                 %td
                   = link_to "#{item.video.title}", item.video
                 %td
                   = button_to "Play", nil, class: "btn btn-default"
                 %td
-                  = item.video.reviews.first.rating
+                  - if item.video.reviews.any?
+                    = item.video.reviews.first.rating
+                  - else
+                    = ""
                 %td
                   = link_to "#{item.video.category.name}", item.video.category
                 %td
