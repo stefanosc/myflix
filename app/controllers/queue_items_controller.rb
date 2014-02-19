@@ -3,6 +3,7 @@ class QueueItemsController < ApplicationController
   before_action :require_user
 
   def index
+    @queue_items = user_queue(current_user)
   end
 
   def create

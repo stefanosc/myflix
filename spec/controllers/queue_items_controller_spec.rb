@@ -3,10 +3,21 @@ require 'spec_helper'
 describe QueueItemsController do
   context 'when user is signed in' do
     let(:user) { Fabricate(:user) }
+    before(:each) do
+      session[:user] = user.id
+    end
 
     describe "GET #index" do
       it "sets @queue_items" do
-        
+        get :index
+        expect(assigns(:queue_items)).not_to be nil
+      end
+      it "sets @queue_items to the user queued items" do
+        q = Fabricate(:queue_item, user: user)
+        q1 = Fabricate(:queue_item, user: user)
+        q2 = Fabricate(:queue_item, user: user)
+        get :index
+        expect(assigns(:queue_items)).to match_array([q,q1,q2])
       end
     end
 
@@ -26,31 +37,19 @@ describe QueueItemsController do
         expect(response).to redirect_to sign_in_path
       end      
     end
-    describe "POST #update" do
-      it "redirects to the sign_in path" do
-        post :update, queue_item: 1
-        expect(response).to redirect_to sign_in_path
-      end
-    end
-    describe "POST #destroy" do
-      it "redirects to the sign_in path" do
-        post :destroy
-        expect(response).to redirect_to sign_in_path
-      end 
-    end
+    # describe "POST #update" do
+    #   it "redirects to the sign_in path" do
+    #     post :update, queue_item: 1
+    #     expect(response).to redirect_to sign_in_path
+    #   end
+    # end
+    # describe "POST #destroy" do
+    #   it "redirects to the sign_in path" do
+    #     post :destroy
+    #     expect(response).to redirect_to sign_in_path
+    #   end 
+    # end
 
-  end
-
-  describe "private #user_queue(user)" do
-    let(:user) { Fabricate(:user) }
-    it "returns user queued items" do
-      session[:user] = user.id
-      q = Fabricate(:queue_item, user: user)
-      q2 = Fabricate(:queue_item, user: user)
-      q3 = Fabricate(:queue_item, user: user)
-      expect(@controller.send(user_queue(user))).to match_array[q,q1,q2]
-
-    end
   end
 
 
