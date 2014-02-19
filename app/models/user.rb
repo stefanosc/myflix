@@ -4,6 +4,7 @@ class User < ActiveRecord::Base
 
   sluggable_column :name
   has_many :reviews
+  has_many :queue_items
 
   has_secure_password validations: false
   validates_presence_of :password, :name, :email

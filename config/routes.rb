@@ -12,6 +12,8 @@ Myflix::Application.routes.draw do
 
   resources :users, only: [:create, :edit, :update]
 
+  resources :queue_items, path: 'my-queue' , only: [:index, :create, :update, :destroy]
+
   resources :videos, except:[:destroy, :index] do
     collection do
       get 'search', to: 'videos#search'
