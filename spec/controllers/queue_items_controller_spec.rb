@@ -47,7 +47,7 @@ describe QueueItemsController do
           expect(flash[:danger]).not_to be nil
         end
         it "redirects_to the video_path that made the request" do
-          expect(response).to redirect_to video_path 
+          expect(response).to redirect_to home_path 
         end
       end
   
@@ -71,13 +71,13 @@ describe QueueItemsController do
     end
     describe "POST #update" do
       it "redirects to the sign_in path" do
-        post :update, use_route: :queue_items, queue_item: 1
+        patch :update, id: "1"
         expect(response).to redirect_to sign_in_path
       end
     end
     describe "POST #destroy" do
       it "redirects to the sign_in path" do
-        post :destroy, use_route: :queue_items
+        delete :destroy, id: "1"
         expect(response).to redirect_to sign_in_path
       end 
     end

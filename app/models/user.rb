@@ -11,6 +11,8 @@ class User < ActiveRecord::Base
   validates_uniqueness_of :email, case_sensitive: false
   validates_length_of :password, within: 4..30, on: :update, allow_blank: true
 
-  private
+  def my_queue_items 
+    instance_eval"queue_items.includes(video: [:category, :reviews]).where('reviews.user_id' => [nil, self.id])"
+  end
     
 end
