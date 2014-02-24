@@ -21,6 +21,6 @@ Myflix::Application.routes.draw do
     resources :reviews, only:[:create]
   end
 
-  resources :categories
+  resources :categories, only: [:index, :show]
 
 end
