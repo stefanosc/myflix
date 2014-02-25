@@ -12,6 +12,4 @@ class Category < ActiveRecord::Base
     videos.first(6)
   end
 
-  private
-    
 end

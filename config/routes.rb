@@ -5,7 +5,7 @@ Myflix::Application.routes.draw do
   get 'home', to: 'videos#index'
 
   get 'register', to: 'users#new'
-  
+
   get 'sign-out', to: 'sessions#destroy',  as: 'sign_out'
   get 'sign-in', to: 'sessions#new', as: 'sign_in'
   post 'sign-in', to: 'sessions#create'

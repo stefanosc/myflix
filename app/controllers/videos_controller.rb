@@ -5,8 +5,8 @@ class VideosController < ApplicationController
 
 
   def index
-    @categories = Category.all    
-  end  
+    @categories = Category.all
+  end
 
   def show
     @reviews = @video.recent_reviews
@@ -14,10 +14,9 @@ class VideosController < ApplicationController
 
   def search
     @q = params[:q]
-    @videos = []
-    Video.search_by_title(@q).each_slice(6) { |v| @videos << v }
+    @videos = Video.search_by_title(@q).first(6)
   end
-  
+
   private
 
   def find_video

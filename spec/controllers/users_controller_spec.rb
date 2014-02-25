@@ -13,16 +13,18 @@ describe UsersController do
   describe "POST #create" do
 
     context "with a valid user" do
-      let(:user) { Fabricate.attributes_for(:user) }
-      before do
-        post :create,  user: user        
-      end
 
-      it "redirects to sign_in_path if the @user is saved" do
+      let(:user) { Fabricate.attributes_for(:user) }
+      before { post :create,  user: user }
+
+      it "it saves the user to the database" do
         expect(User.count).to eq(1)
       end
       it "redirects to sign_in_path" do
         expect(response).to redirect_to sign_in_path
+      end
+      it "sets a flash success message" do
+        expect(flash[:success]).not_to be nil 
       end
     end
 

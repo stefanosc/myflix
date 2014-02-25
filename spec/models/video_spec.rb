@@ -43,7 +43,7 @@ describe Video do
   end
 
   describe "#recent_reviews" do
-    before(:all) do
+    before do
       @movie = Fabricate(:video)
       8.times {Fabricate(:review, video: @movie, created_at: 6.days.ago)}
       @review1 = Fabricate(:review, video: @movie, created_at: 1.day.ago)
