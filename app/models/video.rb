@@ -6,25 +6,13 @@ class Video < ActiveRecord::Base
 
   belongs_to :category
   has_many :reviews, -> { order 'created_at DESC'}
+  has_many :queue_items
 
   validates_presence_of :title, :description, :category
 
   def self.search_by_title(search_term)
     return [] if search_term == "" || search_term == nil
     where('title LIKE ?', "%#{search_term}%").order("created_at DESC")
-  end
-
-  def self.search_by_title_categorized(search_term)
-    raw_results = self.search_by_title(search_term)
-    raw_results.reduce({}) do |collection, video|
-      if collection[video.category].nil?
-        collection[video.category] = []
-        collection[video.category] << video
-      else
-        collection[video.category] << video        
-      end
-      collection
-    end
   end
 
   def recent_reviews

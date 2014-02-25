@@ -4,7 +4,7 @@ ruby '2.0.0'
 gem 'bootstrap-sass'
 gem 'bootstrap_form'
 gem 'coffee-rails'
-gem 'rails'
+gem 'rails', '~> 4.0.2'
 gem 'haml-rails'
 gem 'sass-rails'
 gem 'uglifier'
@@ -14,7 +14,7 @@ gem 'bcrypt-ruby', '~> 3.1.2'
 group :development do
   gem 'sqlite3'
   gem 'thin'
-  gem "better_errors"
+  # gem "better_errors"
   gem "binding_of_caller"
 end
 

@@ -4,10 +4,10 @@ describe VideosController do
 
   let(:video) { Fabricate(:video) }
   let(:user) { Fabricate(:user) }
- 
+
   describe "GET #show" do
     context 'when user is signed in' do
-    
+
       it "assigns the requested video to @video" do
         session[:user] = user.id
         get :show, id: video
@@ -41,7 +41,24 @@ describe VideosController do
       session[:user] = user.id
       matrix = Fabricate(:video, title: "matrix")
       get :search, q: "mat"
-      expect(assigns(:videos)).to eq([[matrix]])
+      expect(assigns(:videos)).to eq([matrix])
+    end
+    it "if there are more than 6 results it only loads the first 6 videos" do
+      session[:user] = user.id
+      matrix = Fabricate(:video, title: "matrix")
+      count = 1
+      6.times do
+        Fabricate(:video, title: "matrix_#{count}")
+        count += 1
+      end
+      get :search, q: "mat"
+      expect(assigns(:videos)).not_to include(matrix)
+    end
+    it "if there are no search results it returns empty array" do
+      session[:user] = user.id
+      matrix = Fabricate(:video, title: "matrix")
+      get :search, q: "love"
+      expect(assigns(:videos)).to eq([])
     end
   end
 end
