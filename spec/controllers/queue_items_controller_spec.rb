@@ -137,7 +137,6 @@ describe QueueItemsController do
           queue_item2 = Fabricate(:queue_item, user: user, position: 2)
           queue_item3 = Fabricate(:queue_item, user: user, position: 3)
           post :update_queue, queue_items: [{id: queue_item1.id, position: 6}, {id: queue_item2.id, position: 5}, {id: queue_item3.id, position: 2}]
-          require 'pry'; binding.pry
           expect(user.queue_items.map(&:position)).to  eq([1, 2, 3])
         end
       end
