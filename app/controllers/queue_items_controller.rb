@@ -20,8 +20,13 @@ class QueueItemsController < ApplicationController
     end
   end
 
-  def update
+  def update_queue
+    queue_items_params.each do |queue_item_input|
+      QueueItem.find(queue_item_input[:id]).update(position: queue_item_input[:position])
+      current_user.queue_items.each_with_index { |queue_item, i| queue_item.update(position: i+1 )}
+    end
 
+    redirect_to queue_items_path
   end
 
   def destroy
@@ -35,6 +40,10 @@ class QueueItemsController < ApplicationController
   end
 
   private
+
+  def queue_items_params
+    params.permit(queue_items:[:id, :position])[:queue_items]
+  end
 
   def queue_item_last_position
     current_user.queue_items.count + 1
