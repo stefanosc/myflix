@@ -63,23 +63,23 @@ describe QueueItemsController do
         end
         it "creates the QueueItem and sets it as last position" do
           video1 = Fabricate(:video)
-          queue_item = QueueItem.create(user: user, video: video1)
+          queue_item = QueueItem.create(user: user, video: video1, position: 1)
           post :create, video_slug: video.slug
           queue_item_last = QueueItem.find_by(video: video)
           expect(queue_item_last.position).to eq(2)
         end
         it "does not create a new queue_item if the video is already in user queue" do
-          queue_item = QueueItem.create(user: user, video: video)
+          queue_item = QueueItem.create(user: user, video: video, position: 1)
           post :create, video_slug: video.slug
           expect(user.queue_items.count).to eq(1)
         end
         it "sets flash message when video is already in user queue" do
-          queue_item = QueueItem.create(user: user, video: video)
+          queue_item = QueueItem.create(user: user, video: video, position: 1)
           post :create, video_slug: video.slug
           expect(flash[:danger]).not_to be nil
         end
         it "redirects back to the queue_items_path when the video is already in the user queue" do
-          queue_item = QueueItem.create(user: user, video: video)
+          queue_item = QueueItem.create(user: user, video: video, position: 1)
           post :create, video_slug: video.slug
           expect(response).to redirect_to queue_items_path
         end
@@ -123,7 +123,7 @@ describe QueueItemsController do
           queue_item2 = Fabricate(:queue_item, user: user, position: 2)
           queue_item3 = Fabricate(:queue_item, user: user, position: 3)
           post :update_queue, queue_items: [{id: queue_item1.id, position: 3}, {id: queue_item2.id, position: 1}, {id: queue_item3.id, position: 2}]
-          expect(response).to redirect_to queue_items_path 
+          expect(response).to redirect_to queue_items_path
         end
         it "updates the order of the queue items" do
           queue_item1 = Fabricate(:queue_item, user: user, position: 1)
@@ -141,10 +141,28 @@ describe QueueItemsController do
         end
       end
       context 'with invalid attributes' do
-        
+        it "redirects to queue_items_path" do
+          queue_item1 = Fabricate(:queue_item, user: user, position: 1)
+          queue_item2 = Fabricate(:queue_item, user: user, position: 2)
+          post :update_queue, queue_items: [{id: queue_item1.id, position: 6}, {id: queue_item2.id, position: 2.2}]
+          expect(response).to redirect_to queue_items_path
+        end
+        it "it sets a flash message" do
+          queue_item1 = Fabricate(:queue_item, user: user, position: 1)
+          queue_item2 = Fabricate(:queue_item, user: user, position: 2)
+          post :update_queue, queue_items: [{id: queue_item1.id, position: 6}, {id: queue_item2.id, position: 2.2}]
+          expect(flash[:danger]).to be_present
+        end
+        it "does not update the queue items position" do
+          queue_item1 = Fabricate(:queue_item, user: user, position: 1)
+          queue_item2 = Fabricate(:queue_item, user: user, position: 2)
+          post :update_queue, queue_items: [{id: queue_item1.id, position: 6}, {id: queue_item2.id, position: 2.2}]
+          expect(queue_item1.reload.position).to  eq(1)
+          expect(queue_item2.reload.position).to  eq(2)
+        end
       end
       context 'when queue items do not belong to current user' do
-        
+
       end
     end
 
