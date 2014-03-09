@@ -162,13 +162,28 @@ describe QueueItemsController do
         end
       end
       context 'when queue items do not belong to current user' do
-
+        it "does not update the queue items position" do
+          user1 = Fabricate(:user)
+          session[:user] = user1.id
+          queue_item1 = Fabricate(:queue_item, user: user, position: 1)
+          queue_item2 = Fabricate(:queue_item, user: user, position: 2)
+          post :update_queue, queue_items: [{id: queue_item1.id, position: 6}, {id: queue_item2.id, position: 5}]
+          expect(queue_item1.reload.position).to eq 1
+        end
+        it "sets a flash[:danger] message" do
+          user1 = Fabricate(:user)
+          session[:user] = user1.id
+          queue_item1 = Fabricate(:queue_item, user: user, position: 1)
+          queue_item2 = Fabricate(:queue_item, user: user, position: 2)
+          post :update_queue, queue_items: [{id: queue_item1.id, position: 6}, {id: queue_item2.id, position: 5}]
+          expect(flash[:danger]).to be_present
+        end
       end
     end
 
     context 'user is not signed in' do
       it "redirects to the sign_in path" do
-        post :update_queue
+        post :update_queue, queue_items: [{id: 1, position: 6}, {id: 2, position: 5}]
         expect(response).to redirect_to sign_in_path
       end
     end
@@ -194,6 +209,13 @@ describe QueueItemsController do
         queue_item = Fabricate(:queue_item, user: user)
         delete :destroy, id: queue_item.id
         expect(response).to redirect_to queue_items_path
+      end
+      it "normalizes the remaining queue items" do
+        queue_item1 = Fabricate(:queue_item, user: user, position: 1)
+        queue_item2 = Fabricate(:queue_item, user: user, position: 2)
+        queue_item3 = Fabricate(:queue_item, user: user, position: 3)
+        delete :destroy, id: queue_item2.id
+        expect(user.queue_items.map(&:position)).to  eq([1, 2])
       end
     end
 
