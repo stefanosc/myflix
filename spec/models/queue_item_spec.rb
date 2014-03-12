@@ -29,6 +29,27 @@ describe QueueItem do
     end
   end
 
+  describe "#rating=" do
+    let(:user) { Fabricate(:user) }
+    let(:video) { Fabricate(:video, title: "love") }
+    let(:queue_item) { Fabricate(:queue_item, video: video, user: user) }
+
+    it "updates the review rating when the review is present" do
+      review = Fabricate(:review, user: user, video: video, rating: 2)
+      queue_item.rating = 4
+      expect(queue_item.reload.rating).to eq(4)
+    end
+    it "clears the rating when the review is present" do
+      review = Fabricate(:review, user: user, video: video, rating: 2)
+      queue_item.rating = nil
+      expect(queue_item.reload.rating).to be_nil
+    end
+    it "creates a new review and set the rating when the review is not present" do
+      queue_item.rating = 4
+      expect(queue_item.reload.rating).to eq(4)
+    end
+  end
+
   describe "#category_name" do
     let(:category) { Fabricate(:category, name: "love") }
     let(:video) { Fabricate(:video, category: category) }

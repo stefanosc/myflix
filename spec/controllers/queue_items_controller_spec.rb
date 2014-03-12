@@ -112,7 +112,7 @@ describe QueueItemsController do
 
 
 
-  describe "POST #update" do
+  describe "POST #update_queue" do
     context 'when user is signed in' do
       let(:user) { Fabricate(:user) }
       before { session[:user] = user.id }
@@ -161,6 +161,7 @@ describe QueueItemsController do
           expect(queue_item2.reload.position).to  eq(2)
         end
       end
+
       context 'when queue items do not belong to current user' do
         it "does not update the queue items position" do
           user1 = Fabricate(:user)
