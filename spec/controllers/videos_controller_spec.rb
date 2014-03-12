@@ -17,7 +17,7 @@ describe VideosController do
         session[:user] = user.id
         get :show, id: video
         review1 = Fabricate(:review, video: video, user: user)
-        review2 = Fabricate(:review, video: video, user: user)
+        review2 = Fabricate(:review, video: video)
         expect(assigns(:reviews)).to  include(review2, review1)
       end
 

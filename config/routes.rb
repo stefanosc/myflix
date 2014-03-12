@@ -12,7 +12,8 @@ Myflix::Application.routes.draw do
 
   resources :users, only: [:create, :edit, :update]
 
-  resources :queue_items, path: 'my-queue' , only: [:index, :create, :update, :destroy]
+  resources :queue_items, path: 'my-queue' , only: [:index, :create, :destroy]
+  post 'update-queue', to: 'queue_items#update_queue', as: 'update_queue'
 
   resources :videos, except:[:destroy, :index] do
     collection do

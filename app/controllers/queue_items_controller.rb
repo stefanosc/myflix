@@ -20,7 +20,17 @@ class QueueItemsController < ApplicationController
     end
   end
 
-  def update
+  def update_queue
+    begin
+      if reorder_queue
+        current_user.normalize_queue_positions
+      else
+        flash[:danger] = "Don't be naughty and try to play with someone else's queue items!"
+      end
+    rescue ActiveRecord::RecordInvalid
+      flash[:danger] = "Your queue was not updated, make sure you only use numbers to set the position"
+    end
+    redirect_to queue_items_path
 
   end
 
@@ -28,6 +38,7 @@ class QueueItemsController < ApplicationController
     queue_item =  QueueItem.find(params[:id])
     if queue_item.user == current_user
       queue_item.destroy
+      current_user.normalize_queue_positions
     else
       flash[:danger] = "This video is not in your queue"
     end
@@ -35,6 +46,23 @@ class QueueItemsController < ApplicationController
   end
 
   private
+
+  def reorder_queue
+    ActiveRecord::Base.transaction do
+      queue_items_params.each do |queue_item_input|
+        queue_item = QueueItem.find(queue_item_input[:id])
+        if queue_item.user == current_user
+          queue_item.update!(position: queue_item_input[:position], rating: queue_item_input[:rating])
+        else
+          return false
+        end
+      end
+    end
+  end
+
+  def queue_items_params
+    params.permit(queue_items:[:id, :position, :rating])[:queue_items]
+  end
 
   def queue_item_last_position
     current_user.queue_items.count + 1

@@ -2,8 +2,8 @@ require 'spec_helper'
 
 describe QueueItem do
 
-  it { should belong_to(:video_id) } 
-  it { should belong_to(:user_id) } 
+  it { should belong_to(:video) } 
+  it { should belong_to(:user) } 
   it { should validate_presence_of(:user_id) }
   it { should validate_presence_of(:video_id) }
 
@@ -26,6 +26,27 @@ describe QueueItem do
     end
     it "returns nil if user has no reviews for video" do
       expect(queue_item.rating).to be nil
+    end
+  end
+
+  describe "#rating=" do
+    let(:user) { Fabricate(:user) }
+    let(:video) { Fabricate(:video, title: "love") }
+    let(:queue_item) { Fabricate(:queue_item, video: video, user: user) }
+
+    it "updates the review rating when the review is present" do
+      review = Fabricate(:review, user: user, video: video, rating: 2)
+      queue_item.rating = 4
+      expect(queue_item.reload.rating).to eq(4)
+    end
+    it "clears the rating when the review is present" do
+      review = Fabricate(:review, user: user, video: video, rating: 2)
+      queue_item.rating = nil
+      expect(queue_item.reload.rating).to be_nil
+    end
+    it "creates a new review and set the rating when the review is not present" do
+      queue_item.rating = 4
+      expect(queue_item.reload.rating).to eq(4)
     end
   end
 
