@@ -39,14 +39,18 @@ describe QueueItem do
       queue_item.rating = 4
       expect(queue_item.reload.rating).to eq(4)
     end
-    it "clears the rating when the review is present" do
+    it "does not change the rating when the rating is not between (1..5) " do
       review = Fabricate(:review, user: user, video: video, rating: 2)
       queue_item.rating = nil
-      expect(queue_item.reload.rating).to be_nil
+      expect(queue_item.reload.rating).to eq(2)
     end
     it "creates a new review and set the rating when the review is not present" do
       queue_item.rating = 4
       expect(queue_item.reload.rating).to eq(4)
+    end
+    it "does not create a review when the rating is not between (1..5) " do
+      queue_item.rating = 0
+      expect(queue_item.video.reviews.count).to eq(0)
     end
   end
 

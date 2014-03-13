@@ -59,4 +59,49 @@ describe ReviewsController do
       end
     end
   end
+
+  describe "POST #destroy_review" do
+    context 'with authenticated user' do
+      let(:user) { Fabricate(:user) }
+      before {session[:user] = user.id }
+
+      context 'when current_user == review.user' do
+        let(:review) { Fabricate(:review, user: user) }
+
+        it "redirects to the queue_items_path" do
+          post :destroy_review, review: review.id
+          expect(response).to redirect_to queue_items_path
+        end
+        it "destroys the review passed via params" do
+          post :destroy_review, review: review.id
+          expect(Review.all.count).to eq 0
+        end
+
+      end
+  
+      context 'when current_user != review.user' do
+        let(:review) { Fabricate(:review) }
+         
+        it "redirects to the queue_items_path" do
+          post :destroy_review, review: review.id
+          expect(response).to redirect_to queue_items_path
+        end
+        it "does not destroy the review passed via params" do
+          post :destroy_review, review: review.id
+          expect(Review.all.count).to eq 1
+        end
+        it "sets a flash[:danger] message" do
+          post :destroy_review, review: review.id
+          expect(flash[:danger]).to  be_present
+        end
+      end
+    end
+
+    context 'with un-authenticated user' do
+      it "redirects to the login page" do
+        post :destroy_review, id: 1
+        expect(response).to redirect_to sign_in_path
+      end
+    end
+  end
 end
