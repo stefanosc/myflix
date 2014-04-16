@@ -2,14 +2,13 @@ require 'spec_helper'
 
 describe ReviewsController do
 
+  before { set_current_user }
+
   describe "POST #create" do
 
     let(:video) { video = Fabricate(:video) }
 
     context 'with authenticated user' do
-
-      let(:current_user) { Fabricate(:user) }
-      before {session[:user] = current_user.id }
 
       context 'with valid input' do
         before { post :create, review: Fabricate.attributes_for(:review), video_id: video.slug }
@@ -51,12 +50,49 @@ describe ReviewsController do
       end
     end
 
-    context 'with un-authenticated user' do
+    it_behaves_like "requires user to sign in"  do
+      let(:action) {post :create, review: {rating: 5}, video_id: video.slug}
+    end
+  end
 
-      it "redirects to the sing_in_path" do
-        post :create, review: {rating: 5}, video_id: video.slug
-        expect(response).to redirect_to sign_in_path
+  describe "POST #destroy" do
+    context 'with authenticated user' do
+
+      context 'when current_user == review.user' do
+        let(:review) { Fabricate(:review, user: current_user) }
+
+        it "redirects to the queue_items_path" do
+          post :destroy, review: review.id
+          expect(response).to redirect_to queue_items_path
+        end
+        it "destroys the review passed via params" do
+          post :destroy, review: review.id
+          expect(Review.all.count).to eq 0
+        end
+
       end
+
+      context 'when current_user != review.user' do
+        let(:review) { Fabricate(:review) }
+
+        it "redirects to the queue_items_path" do
+          post :destroy, review: review.id
+          expect(response).to redirect_to queue_items_path
+        end
+        it "does not destroy the review passed via params" do
+          post :destroy, review: review.id
+          expect(Review.all.count).to eq 1
+        end
+        it "sets a flash[:danger] message" do
+          post :destroy, review: review.id
+          expect(flash[:danger]).to  be_present
+        end
+      end
+    end
+
+    it_behaves_like "requires user to sign in"  do
+      let(:action) { post :destroy, id: 1 }
     end
   end
 end
+˚∫

@@ -12,6 +12,17 @@ class ReviewsController < ApplicationController
     end
   end
 
+  def destroy
+
+    review = Review.find(params[:review])
+    if review.user == current_user
+      review.delete
+    else
+      flash[:danger] = "You can only delete reviews you created"
+    end
+    redirect_to queue_items_path
+  end
+
   private
 
   def review_params
