@@ -7,15 +7,18 @@ feature "my_queue" do
     video1 = Fabricate(:video, title: "video1")
     video2 = Fabricate(:video, title: "video2")
     video3 = Fabricate(:video, title: "video3")
+
     sign_in(user)
     visit home_path
     find(:xpath, "//a[@href='/videos/video1']").click
     click_on "+ My Queue"
     visit queue_items_path
     expect(page).to have_content "video1"
+
     click_on "video1"
     expect(page).to have_content "video1"
     expect(page).not_to have_content "+ My Queue"
+    
     visit home_path
     find(:xpath, "//a[@href='/videos/video2']").click
     click_on "+ My Queue"
