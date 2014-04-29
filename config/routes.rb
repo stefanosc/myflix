@@ -22,7 +22,7 @@ Myflix::Application.routes.draw do
     resources :reviews, only:[:create]
   end
 
-  post 'remove-review', to: 'reviews#destroy_review', as: 'destroy_review'
+  post 'remove-review', to: 'reviews#destroy', as: 'destroy'
 
   resources :categories, only: [:index, :show]
 

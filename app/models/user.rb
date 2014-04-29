@@ -15,4 +15,8 @@ class User < ActiveRecord::Base
     queue_items.each_with_index { |queue_item, i| queue_item.update(position: i+1 )}
   end
 
+  def in_my_queue?(video)
+    !queue_items.select { |queue_item| queue_item.video_id == video.id}.empty?
+  end
+
 end
