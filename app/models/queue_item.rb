@@ -13,14 +13,16 @@ class QueueItem < ActiveRecord::Base
     review.try(:rating)
   end
 
-  def rating= (rating)
-    if review 
-      review.update_attribute(:rating, rating)
-    else
-      review = Review.new(video_id: video_id,
-                          user_id: user_id,
-                          rating: rating )
-      review.save(validate: false)
+  def rating= (new_rating)
+    if (1..5).include?(new_rating.to_i)
+      if review 
+        review.update_attribute(:rating, new_rating)
+      else
+        review = Review.new(video_id: video_id,
+                            user_id: user_id,
+                            rating: new_rating )
+        review.save(validate: false)
+      end
     end
   end
 
@@ -29,7 +31,7 @@ class QueueItem < ActiveRecord::Base
   end
 
   def review
-    Review.where(user_id: user_id, video_id: video_id).first
+    @review ||= Review.where(user_id: user_id, video_id: video_id).first
   end
 
 end

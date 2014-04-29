@@ -10,10 +10,11 @@
               %tr
                 %th(width="10%") List Order
                 %th(width="30%") Video Title
-                %th(width="10%") Play
-                %th(width="20%") Rating
-                %th(width="15%") Genre
-                %th(width="15%") Remove
+                %th(width="9%") Play
+                %th(width="17%") Rating
+                %th(width="8%") Remove Rating
+                %th(width="14%") Genre
+                %th(width="12%") Remove from Queue
             %tbody
               - @queue_items.each do |queue_item|
                 %tr
@@ -25,7 +26,11 @@
                   %td
                     = button_to "Play", nil, class: "btn btn-default"
                   %td
-                    = select_tag "queue_items[][rating]", options_tag_for_rating(queue_item.rating), include_blank: true, class: "form-control input-group"
+                    = select_tag "queue_items[][rating]", options_tag_for_rating(queue_item.rating), include_blank: true, class: "form-control input-group pull-right"
+                  %td
+                    - if queue_item.review
+                      = link_to destroy_review_path(review: queue_item.review.id), method: :post do
+                        %i.glyphicon.glyphicon-remove
                   %td
                     = link_to "#{queue_item.category_name}", queue_item.category
                   %td
