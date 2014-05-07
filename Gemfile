@@ -4,9 +4,9 @@ ruby '2.1.0'
 gem 'bootstrap-sass'
 gem 'bootstrap_form'
 gem 'coffee-rails'
-gem 'rails', '~> 4.1.0'
+gem 'rails', '~> 4.0.4'
 gem 'haml-rails'
-gem 'sass-rails'
+gem 'sass-rails', '~> 4.0.2'
 gem 'uglifier'
 gem 'jquery-rails'
 gem 'bcrypt-ruby', '~> 3.1.2' 
@@ -36,6 +36,6 @@ group :test do
   gem "launchy"
   gem 'shoulda-matchers'
   gem "selenium-webdriver"
-  gem "fivemat"
+  gem "fivemat", '1.2.1'
   gem 'fabrication'
 end
