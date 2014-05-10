@@ -60,4 +60,21 @@ describe UsersController do
     end
   end
 
+  describe "GET #index" do
+
+    it_behaves_like "requires user to sign in" do
+      let(:action) { get :index }
+    end
+
+    it "sets the @followings of the current_user" do
+      set_current_user
+      users = []
+      3.times {|i| users << Fabricate(:user)}
+      current_user.followed_users = users
+      get :index
+      expect(assigns(:followings)).to eq(current_user.followings)
+    end
+
+  end
+
 end

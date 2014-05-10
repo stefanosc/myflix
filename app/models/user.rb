@@ -5,6 +5,10 @@ class User < ActiveRecord::Base
   sluggable_column :name
   has_many :reviews
   has_many :queue_items, -> { order "position ASC" }
+  has_many :followings
+  has_many :followed_users, through: :followings
+  has_many :following_followers, class_name: :Following, foreign_key: :followed_user_id
+  has_many :followers, through: :following_followers, source: :user
 
   has_secure_password validations: false
   validates_presence_of :password, :name, :email

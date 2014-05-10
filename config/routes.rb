@@ -14,7 +14,9 @@ Myflix::Application.routes.draw do
   post 'update-queue', to: 'queue_items#update_queue', as: 'update_queue'
 
   get 'register', to: 'users#new'
-  resources :users, only: [:create, :edit, :update, :show]
+  resources :users, only: [:index, :create, :edit, :update, :show]
+
+  resources :followings, only: [:create, :destroy]
 
   get 'sign-out', to: 'sessions#destroy',  as: 'sign_out'
   get 'sign-in', to: 'sessions#new', as: 'sign_in'

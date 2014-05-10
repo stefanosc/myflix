@@ -29,7 +29,7 @@
                     = select_tag "queue_items[][rating]", options_tag_for_rating(queue_item.rating), include_blank: true, class: "form-control input-group pull-right"
                   %td
                     - if queue_item.review
-                      = link_to destroy_review_path(review: queue_item.review.id), method: :post do
+                      = link_to destroy_path(review: queue_item.review.id), method: :post do
                         %i.glyphicon.glyphicon-remove
                   %td
                     = link_to "#{queue_item.category_name}", queue_item.category
