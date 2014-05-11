@@ -16,7 +16,7 @@ feature "People" do
     visit_video_and_follow_user(video2.slug, kelly.name)
     expect(user.followed_users).to match_array([mark, kelly])
 
-    visit users_path
+    visit people_path
     find(:xpath, "//a[contains(@href,'Mark')]").click
     expect(user.followed_users.count).to eq(1)
 

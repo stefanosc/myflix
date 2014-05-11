@@ -26,7 +26,7 @@ describe FollowingsController do
       end
 
       it "it redirects to the people page" do
-        expect(request).to redirect_to users_path
+        expect(request).to redirect_to people_path
       end
 
       context 'when user is already following the other user' do
@@ -51,7 +51,7 @@ describe FollowingsController do
         expect(flash[:danger]).not_to be_nil
       end
       it "it redirects to the people page" do
-        expect(request).to redirect_to users_path
+        expect(request).to redirect_to people_path
       end
 
     end
@@ -78,8 +78,27 @@ describe FollowingsController do
         expect(flash[:success]).not_to be_nil
       end
       it "redirects to the people page" do
-        expect(response).to redirect_to(users_path)
+        expect(response).to redirect_to(people_path)
       end
     end
   end
+
+  describe "GET #index" do
+
+    it_behaves_like "requires user to sign in" do
+      let(:action) { get :index }
+    end
+
+    it "sets the @followings of the current_user" do
+      set_current_user
+      users = []
+      3.times {|i| users << Fabricate(:user)}
+      current_user.followed_users = users
+      get :index
+      expect(assigns(:followings)).to eq(current_user.followings)
+    end
+
+  end
+
+
 end

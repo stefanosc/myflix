@@ -17,6 +17,7 @@ Myflix::Application.routes.draw do
   resources :users, only: [:index, :create, :edit, :update, :show]
 
   resources :followings, only: [:create, :destroy]
+  get 'people', to: 'followings#index'
 
   get 'sign-out', to: 'sessions#destroy',  as: 'sign_out'
   get 'sign-in', to: 'sessions#new', as: 'sign_in'
