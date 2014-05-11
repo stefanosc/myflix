@@ -24,14 +24,14 @@ describe UsersController do
         expect(response).to redirect_to sign_in_path
       end
       it "sets a flash success message" do
-        expect(flash[:success]).not_to be nil 
+        expect(flash[:success]).not_to be nil
       end
     end
 
     context "with an invalid user" do
       let(:user) { Fabricate.attributes_for(:user, name: "")}
       before do
-        post :create,  user: user        
+        post :create,  user: user
       end
 
       it "does not create the user" do
@@ -46,4 +46,35 @@ describe UsersController do
     end
 
   end
+
+  describe "GET #show" do
+    it_behaves_like "requires user to sign in" do
+      let(:action) { get :show, id: "mark" }
+    end
+
+    it "sets @user variable" do
+      set_current_user
+      user1 = Fabricate(:user)
+      get :show, id: user1.slug
+      expect(assigns(:user)).to eq user1
+    end
+  end
+
+  describe "GET #index" do
+
+    it_behaves_like "requires user to sign in" do
+      let(:action) { get :index }
+    end
+
+    it "sets the @followings of the current_user" do
+      set_current_user
+      users = []
+      3.times {|i| users << Fabricate(:user)}
+      current_user.followed_users = users
+      get :index
+      expect(assigns(:followings)).to eq(current_user.followings)
+    end
+
+  end
+
 end

@@ -6,35 +6,37 @@
 #   cities = City.create([{ name: 'Chicago' }, { name: 'Copenhagen' }])
 #   Mayor.create(name: 'Emanuel', city: cities.first)
 
-12.times do
-  Video.create(title: "Monk", 
-              description: "This is the best monk movie. Enjoy your membership", 
-              small_cover_url: "/tmp/monk.jpg", 
-              large_cover_url: "/tmp/monk_large.jpg", category_id: 2)
+Category.delete_all
+Video.delete_all
+User.delete_all
+Review.delete_all
 
-  Video.create(title: "Family Guy", 
-              description: "This is the best Family Guy movie. Enjoy your membership", 
-              small_cover_url: "/tmp/family_guy.jpg", 
-              large_cover_url: "/tmp/monk_large.jpg", category_id: 1)
-
+%w(Action Sci-Fi Fantasy).each do |category|
+  description = "In this category you will find the most beautiful #{category.downcase} movies"
+  Category.create(name: category, description: description)
 end
 
-category = ["Love", "Action", "Sci-Fi", "Fantasy"]
-
-4.times do |i|
-  c = Category.new 
-  c.name = category[i]
-  c.description = "In this category you will find the most beautiful #{category[i].downcase} movies"
-  c.save
+Dir.glob('public/tmp/*.jpg').sort.each do |image|
+  unless image.match("large")
+    movie_title = File.basename(image,'.jpg').gsub('_', ' ').titleize 
+    movie_thumbnail = image.gsub('public', '')
+  end
+  categories = Category.all
+  video = Video.create(title: movie_title, 
+              description: "#{movie_title} is just awesome. Enjoy your membership", 
+              small_cover_url: movie_thumbnail, 
+              large_cover_url: "/tmp/monk_large.jpg", 
+              category_id: categories[rand(3)].id )
 end
 
-i = 1
+users = []
+users << mark = User.create(name: "Mark Jacob", email: "mark@example.com", password: "mark")
+users << kelly = User.create(name: "Kelly Jones", email: "kelly@example", password: "kelly")
+users << stefano = User.create(name: "Stefano Schiavi", email: "stefano@bvprojects.org", password: "stefano")
 
-Video.all.each do |v|
-  v.category_id = i
-  v.save
-  i+=1
-  if i > 4
-    i = 1
-  end 
+Video.all.each do |video|
+  review = ["I quite like this movie", "This movie was fantastic", "It was ok", "Best movie ever"]
+  users.each do |user|
+    Review.create(user: user, video: video, body: review[rand(4)], rating: rand(5)+1 )
+  end
 end

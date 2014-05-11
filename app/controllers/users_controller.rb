@@ -1,6 +1,11 @@
 class UsersController < ApplicationController
-  before_action :set_user, except: [:new, :create]
+  before_action :set_user, only: [:show]
+  before_action :require_user, only: [:show, :index]
 
+  def index
+    @followings = current_user.followings
+  end
+  
   def new
     @user = User.new
   end
@@ -16,7 +21,11 @@ class UsersController < ApplicationController
     end
   end
 
+  def show
+  end
+
   private
+
   def set_user
     @user = User.find_by_slug(params[:id]) if params[:id]
   end

@@ -5,6 +5,10 @@ describe User do
   it { should have_many(:queue_items) } 
   it { should have_many(:reviews) } 
   it { should validate_presence_of(:password) }
+  it { should have_many(:following_followers) }
+  it { should have_many(:followers) }
+  it { should have_many(:followings) }
+  it { should have_many(:followed_users) }
 
   describe "#in_my_queue?" do
     let(:video1) { Fabricate(:video) }
