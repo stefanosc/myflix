@@ -7,14 +7,18 @@ class FollowingsController < ApplicationController
 
   def create
 
-    following = current_user.followings.build(followed_user_id: params[:id] )
-
-    if following.save
-      flash[:success] = "You are now following #{params[:name]}"
-    elsif following.errors.has_key?(:followed_user_id)
-      flash[:danger] =  "You are already following #{params[:name]}"
+    if current_user.id == params[:id].to_i
+      flash[:danger] = "You can't follow yourself"
     else
-      flash[:danger] = "There was an error please try again later"
+      following = current_user.followings.build(followed_user_id: params[:id] )
+
+      if following.save
+        flash[:success] = "You are now following #{params[:name]}"
+      elsif following.errors.has_key?(:followed_user_id)
+        flash[:danger] =  "You are already following #{params[:name]}"
+      else
+        flash[:danger] = "There was an error please try again later"
+      end
     end
 
     redirect_to people_path

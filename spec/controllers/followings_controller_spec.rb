@@ -28,13 +28,13 @@ describe FollowingsController do
       it "it redirects to the people page" do
         expect(request).to redirect_to people_path
       end
+    end
 
-      context 'when user is already following the other user' do
-        it "sets a different flash message" do
-          expect(flash[:danger]).not_to eq("You already follow #{user1.name}")
-        end
+    context 'when user is trying to follow him/her self' do
+      it "does not save the following" do
+        post :create, id: current_user.id, name: current_user.name
+        expect(Following.all.count).to eq(0)
       end
-
     end
 
     context 'with invalid user id' do
