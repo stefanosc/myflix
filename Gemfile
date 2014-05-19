@@ -9,13 +9,16 @@ gem 'haml-rails'
 gem 'sass-rails', '~> 4.0.2'
 gem 'uglifier'
 gem 'jquery-rails'
-gem 'bcrypt-ruby', '~> 3.1.2' 
+gem 'bcrypt-ruby', '~> 3.1.2'
+gem "figaro"
+gem 'roadie'
 
 group :development do
   gem 'sqlite3'
   gem 'thin'
   # gem "better_errors"
   gem "binding_of_caller"
+  gem 'letter_opener'
 end
 
 group :production do
