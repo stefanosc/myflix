@@ -1,7 +1,7 @@
 class UsersController < ApplicationController
   before_action :set_user, only: [:show]
   before_action :require_user, only: [:show]
-  
+
   def new
     @user = User.new
   end
@@ -11,6 +11,7 @@ class UsersController < ApplicationController
 
     if @user.save
       flash[:success] = "You have successfully registered"
+      AppMailer.welcome_email(@user).deliver
       redirect_to sign_in_path
     else
       render :new
