@@ -26,6 +26,23 @@ describe UsersController do
       it "sets a flash success message" do
         expect(flash[:success]).not_to be nil
       end
+
+      context 'sends welcome email' do
+        let(:user) { Fabricate.attributes_for(:user) }
+        before { post :create,  user: user }
+
+        it "sends the welcome email" do
+          expect(ActionMailer::Base.deliveries).not_to be_empty
+        end
+        it "sends the email to the correct user" do
+          message = ActionMailer::Base.deliveries.last
+          expect(message.to.first).to  eq(user[:email])
+        end
+        it "sends the email with correct content" do
+          message = ActionMailer::Base.deliveries.last
+          expect(message.parts[0].body.raw_source).to  include("Welcome to LoveFlix, we really appreciate")
+        end
+      end
     end
 
     context "with an invalid user" do

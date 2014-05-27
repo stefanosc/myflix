@@ -1,6 +1,6 @@
 class User < ActiveRecord::Base
 
-  include Sluggable 
+  include Sluggable
 
   sluggable_column :name
   has_many :reviews
