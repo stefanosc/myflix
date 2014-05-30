@@ -1,10 +1,9 @@
 require 'spec_helper'
 
 describe User do
-  
-  it { should have_many(:queue_items) } 
-  it { should have_many(:reviews) } 
-  it { should validate_presence_of(:password) }
+
+  it { should have_many(:queue_items) }
+  it { should have_many(:reviews) }
   it { should have_many(:following_followers) }
   it { should have_many(:followers) }
   it { should have_many(:followings) }
@@ -17,7 +16,7 @@ describe User do
     before { Fabricate(:queue_item, video: video2, user: user) }
 
     it "returns true if the video is in the user queue_items" do
-      expect(user.in_my_queue?(video2)).to be_true 
+      expect(user.in_my_queue?(video2)).to be_true
     end
     it "returns false if the video is not in the user queue_items" do
       expect(user.in_my_queue?(video1)).to be_false

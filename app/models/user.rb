@@ -1,8 +1,7 @@
 class User < ActiveRecord::Base
 
-  include Sluggable
+  before_create :generate_token
 
-  sluggable_column :name
   has_many :reviews
   has_many :queue_items, -> { order "position ASC" }
   has_many :followings
@@ -11,7 +10,8 @@ class User < ActiveRecord::Base
   has_many :followers, through: :following_followers, source: :user
 
   has_secure_password validations: false
-  validates_presence_of :password, :name, :email
+  validates_presence_of :name, :email
+  validates_presence_of :password, on: :update, allow_blank: true
   validates_uniqueness_of :email, case_sensitive: false
   validates_length_of :password, within: 4..30, on: :update, allow_blank: true
 
@@ -23,4 +23,11 @@ class User < ActiveRecord::Base
     !queue_items.select { |queue_item| queue_item.video_id == video.id}.empty?
   end
 
+  def to_param
+    token
+  end
+
+  def generate_token
+     self.token = SecureRandom.urlsafe_base64
+  end
 end

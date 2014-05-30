@@ -31,14 +31,14 @@ describe UsersController do
         let(:user) { Fabricate.attributes_for(:user) }
         before { post :create,  user: user }
 
-        it "sends the welcome email" do
+        it "delivers email" do
           expect(ActionMailer::Base.deliveries).not_to be_empty
         end
-        it "sends the email to the correct user" do
+        it "to the correct user" do
           message = ActionMailer::Base.deliveries.last
           expect(message.to.first).to  eq(user[:email])
         end
-        it "sends the email with correct content" do
+        it "with correct content" do
           message = ActionMailer::Base.deliveries.last
           expect(message.parts[0].body.raw_source).to  include("Welcome to LoveFlix, we really appreciate")
         end
@@ -69,10 +69,10 @@ describe UsersController do
       let(:action) { get :show, id: "mark" }
     end
 
-    it "sets @user variable" do
+    it "sets @user variable to the requested user1" do
       set_current_user
       user1 = Fabricate(:user)
-      get :show, id: user1.slug
+      get :show, id: user1.token
       expect(assigns(:user)).to eq user1
     end
   end
