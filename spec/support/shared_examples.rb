@@ -5,3 +5,10 @@ shared_examples "requires user to sign in" do
     expect(response).to redirect_to sign_in_path
   end
 end
+
+shared_examples "redirects to invalid token page with invalid token" do
+  it "renders the token invalid page" do
+    action
+    expect(response).to render_template("pages/invalid_token")
+  end
+end

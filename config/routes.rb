@@ -23,6 +23,11 @@ Myflix::Application.routes.draw do
   get 'sign-in', to: 'sessions#new', as: 'sign_in'
   post 'sign-in', to: 'sessions#create'
 
+  get 'password_reset', to: 'password_resets#new'
+  post 'password_reset', to: 'password_resets#create'
+  get 'password_reset/:password_reset', to: 'password_resets#edit', as: 'edit_password_reset'
+  patch 'password_reset/:password_reset', to: 'password_resets#update', as: 'update_password_reset'
+
   root to: 'pages#front'
   get 'home', to: 'videos#index'
 
