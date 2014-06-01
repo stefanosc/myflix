@@ -7,7 +7,7 @@ class PasswordResetsController < ApplicationController
     if user = User.find_by(email: params[:email])
       user.update(password_reset: SecureRandom.urlsafe_base64, password_reset_created_at: Time.now)
       AppMailer.password_reset(user).deliver
-      render "pages/confirm_password_reset"
+      redirect_to "pages/confirm_password_reset"
     else
       flash.now[:danger] = "The email you entered is invalid"
       render :new
