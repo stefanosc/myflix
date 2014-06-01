@@ -1,0 +1,15 @@
+%h1 Welcome To LoveFlix
+%h3 The Video Platform that You Will Always Love
+
+%p Dear #{@user.name.split(' ')[0]},
+
+%p
+	Welcome to LoveFlix, we really appreciate to have you as one of our valued customers and can't wait to delight you with our services.
+	%br	We invite you to #{link_to "sign in", sign_in_url} and start browsing videos.
+	%br	Or have a look at your profile #{link_to "profile", user_url(@user)}
+
+%p Please let us know if there is anything we can do for you, simply answer this email and we'll be here!
+
+%p
+	With love,
+	%br	The LoveFlix team

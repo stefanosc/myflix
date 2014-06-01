@@ -11,5 +11,5 @@
           = f.text_field :name, label: "Full Name"
         %fieldset.actions.control-group.col-sm-offset-3
           .controls
-            - value = @user.new_record? ? 'Sign Up' : 'Update Account'        
+            - value = @user.new_record? ? 'Sign Up' : 'Update Account'
             %input{type: "submit", class: "btn btn-default", value: "#{value}"}

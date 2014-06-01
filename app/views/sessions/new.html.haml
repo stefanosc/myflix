@@ -19,3 +19,4 @@
                 = password_field_tag :password, pwd, class: "form-control"
         %fieldset.form-group.action
           %input(type="submit" value="Sign in" class="btn btn-default")
+          = link_to "Forgot Password?", password_reset_path, {class: "password_reset"}
