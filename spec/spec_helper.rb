@@ -4,6 +4,7 @@ require File.expand_path("../../config/environment", __FILE__)
 require 'rspec/rails'
 require 'rspec/autorun'
 require 'capybara/rspec'
+require 'capybara/email/rspec'
 
 # Requires supporting ruby files with custom matchers and macros, etc,
 # in spec/support/ and its subdirectories.
@@ -27,15 +28,21 @@ RSpec.configure do |config|
   # Remove this line if you're not using ActiveRecord or ActiveRecord fixtures
   config.fixture_path = "#{::Rails.root}/spec/fixtures"
 
+  # If a feature test fails open page in browser
+  config.after do
+    if example.metadata[:type] == :feature and example.exception.present?
+      save_and_open_page
+    end
+  end
   # If you're not using ActiveRecord, or you'd prefer not to run each of your
   # examples within a transaction, remove the following line or assign false
   # instead of true.
   config.use_transactional_fixtures = false
-  
+
   config.before(:suite) do
     DatabaseCleaner.clean_with(:truncation)
   end
-  
+
   config.before(:each) do
     DatabaseCleaner.strategy = :deletion
   end
@@ -43,7 +50,7 @@ RSpec.configure do |config|
   config.before(:each, :js => true) do
     DatabaseCleaner.strategy = :truncation
   end
-  
+
   config.before(:each) do
     DatabaseCleaner.start
   end
