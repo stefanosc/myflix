@@ -16,10 +16,10 @@ describe User do
     before { Fabricate(:queue_item, video: video2, user: user) }
 
     it "returns true if the video is in the user queue_items" do
-      expect(user.in_my_queue?(video2)).to be_true
+      expect(user.in_my_queue?(video2)).to be true
     end
     it "returns false if the video is not in the user queue_items" do
-      expect(user.in_my_queue?(video1)).to be_false
+      expect(user.in_my_queue?(video1)).to be false
     end
   end
 

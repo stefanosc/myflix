@@ -28,12 +28,9 @@ RSpec.configure do |config|
   # Remove this line if you're not using ActiveRecord or ActiveRecord fixtures
   config.fixture_path = "#{::Rails.root}/spec/fixtures"
 
-  # If a feature test fails open page in browser
-  config.after do
-    if example.metadata[:type] == :feature and example.exception.present?
-      save_and_open_page
-    end
-  end
+  # Infer spec type to keep compatibility from rspec 2.xx
+  config.infer_spec_type_from_file_location!
+
   # If you're not using ActiveRecord, or you'd prefer not to run each of your
   # examples within a transaction, remove the following line or assign false
   # instead of true.

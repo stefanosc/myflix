@@ -6,7 +6,7 @@ describe SessionsController do
     it "sets the session referer if the session referer is nil" do
       request.env["HTTP_REFERER"] = "some_path"
       post :new
-      expect(session[:referer]).to be_true
+      expect(session[:referer]).to be_truthy
     end
     it "does not reset the referer if it is not nil" do
       session[:referer] = "some_path"
