@@ -27,6 +27,8 @@ Myflix::Application.routes.draw do
   post 'password_reset', to: 'password_resets#create'
   get 'password_reset/:password_reset', to: 'password_resets#edit', as: 'edit_password_reset'
   patch 'password_reset/:password_reset', to: 'password_resets#update', as: 'update_password_reset'
+  get 'confirm_password_reset', to: 'password_resets#confirm_password_reset'
+  get 'invalid_token', to: 'password_resets#invalid_token'
 
   root to: 'pages#front'
   get 'home', to: 'videos#index'
