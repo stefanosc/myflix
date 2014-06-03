@@ -27,7 +27,7 @@ describe PasswordResetsController do
       end
 
       it "renders the password reset confirmation page" do
-        expect(response).to redirect_to("pages/confirm_password_reset")
+        expect(response).to redirect_to(confirm_password_reset_path)
       end
 
     end
