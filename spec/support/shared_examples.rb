@@ -9,6 +9,6 @@ end
 shared_examples "redirects to invalid token page with invalid token" do
   it "renders the token invalid page" do
     action
-    expect(response).to render_template("pages/invalid_token")
+    expect(response).to redirect_to(invalid_token_path)
   end
 end
