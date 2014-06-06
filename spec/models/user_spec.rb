@@ -8,6 +8,7 @@ describe User do
   it { should have_many(:followers) }
   it { should have_many(:followings) }
   it { should have_many(:followed_users) }
+  it { should have_many(:invites) }
 
   describe "#in_my_queue?" do
     let(:video1) { Fabricate(:video) }
