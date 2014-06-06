@@ -1,0 +1,17 @@
+%h1 #{@inviter_name} invited you to join LoveFlix
+
+%p Dear #{@invite.invitee_name},
+
+%p #{@inviter_name} thought that you may enjoy LoveFlix and sent you an invitation to join.
+
+%p
+  #{@inviter_name} personal message:
+  %blockquote
+  = @invite.message
+
+  = binding.pry
+  %br Head over to LoveFlix to #{link_to "register", register_invite_url(@invite.token)}
+
+%p
+  With love,
+  %br	The LoveFlix team
