@@ -11,4 +11,5 @@
             = f.text_field :invitee_email, label: "Friend's Email Address"
             = f.text_area :message, label: "Invitation Message", rows: 5
             %fieldset.form-group.action
-              = submit_tag "Send Invitation", class: "btn btn-default"
+              .col-sm-5
+                = submit_tag "Send Invitation", class: "btn btn-default"
