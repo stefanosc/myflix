@@ -21,7 +21,7 @@ class InvitesController < ApplicationController
   private
 
   def invite_params
-    params.permit(:invitee_name, :invitee_email, :message)
+    params[:invite].permit(:invitee_name, :invitee_email, :message)
   end
 
 end

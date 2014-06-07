@@ -8,6 +8,21 @@ describe UsersController do
       get :new
       expect(assigns(:user)).to be_new_record
     end
+
+    context "when invite_token is present" do
+      let(:invite) { Fabricate(:invite) }
+      before { get :new, invite_token: invite.token }
+
+      it "pre populates @user.name" do
+        expect(assigns(:user).name).to eq(invite.invitee_name)
+      end
+      it "pre populates @user.email" do
+        expect(assigns(:user).email).to eq(invite.invitee_email)
+      end
+      it "pre populates @user.invite_token" do
+        expect(assigns(:user).invite_token).to eq(invite.token)
+      end
+    end
   end
 
   describe "POST #create" do
@@ -41,6 +56,24 @@ describe UsersController do
         it "with correct content" do
           message = ActionMailer::Base.deliveries.last
           expect(message.parts[0].body.raw_source).to  include("Welcome to LoveFlix, we really appreciate")
+        end
+      end
+
+      context "and the user was invited" do
+        let(:inviter) { Fabricate(:user) }
+        let(:invite) { Fabricate(:invite, inviter_id: inviter.id) }
+        before do
+          password = Faker::Lorem.characters(10)
+          post :create,  user: { name: invite.invitee_name,email: invite.invitee_email, password: password, invite_token: invite.token }
+          @user = User.where(invite_token: invite.token).first
+        end
+
+        it "the user becomes follower of the inviter" do
+          expect(@user.followers).to include(inviter)
+        end
+
+        it "the inviter becomes follower of the user" do
+          expect(inviter.followers).to include(@user)
         end
       end
     end

@@ -19,7 +19,10 @@ RSpec.describe InvitesController, :type => :controller do
 
     context 'with valid attributes' do
       before do
-        get :create, invitee_name: "Erik", invitee_email: "erik@example.com", message: "you will love this site dear Erik, \nlove"
+        get :create, invite: { invitee_name: "Erik",
+                               invitee_email: "erik@example.com",
+                               message: "you will love this site dear Erik, \nlove"
+                             }
       end
       it "redirects to new_invite_path" do
         expect(response).to redirect_to(people_path)
@@ -48,7 +51,10 @@ RSpec.describe InvitesController, :type => :controller do
 
     context 'with invalid attributes' do
       before do
-        get :create, invitee_name: "Erik", invitee_email: "@example.com", message: "you will love this site dear Erik, love"
+        get :create, invite: { invitee_name: "Erik",
+                               invitee_email: "@example.com",
+                               message: "you will love this site dear Erik, love"
+                             }
       end
 
       it "renders the :new template" do
