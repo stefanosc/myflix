@@ -12,9 +12,9 @@ class User < ActiveRecord::Base
 
   has_secure_password validations: false
   validates_presence_of :name, :email
-  validates_presence_of :password, on: :update, allow_blank: true
+  validates_presence_of :password, on: :create
   validates_uniqueness_of :email, case_sensitive: false
-  validates_length_of :password, within: 4..30, on: :update, allow_blank: true
+  validates_length_of :password, within: 4..30, allow_blank: true
 
   def normalize_queue_positions
     queue_items.each_with_index { |queue_item, i| queue_item.update(position: i+1 )}
