@@ -14,8 +14,9 @@ Myflix::Application.routes.draw do
   post 'update-queue', to: 'queue_items#update_queue', as: 'update_queue'
 
   get 'register', to: 'users#new'
-  get 'register/:invite_token', to: 'users#new', as: 'register_invite'
+  get 'register/:invite_token', to: 'users#new_with_invitation', as: 'register_invite'
   resources :users, only: [:index, :create, :edit, :update, :show]
+  get 'used_token', to: 'users#used_token'
 
   resources :followings, only: [:create, :destroy]
   get 'people', to: 'followings#index'

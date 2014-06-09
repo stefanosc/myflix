@@ -1,0 +1,7 @@
+%section.invalid_token.container
+  .row
+    .col-sm-10.col-sm-offset-1
+      %p You clicked on an invitation link that has already been used
+      %br If you have registered before you can head over to the #{link_to "Sign In page", sign_in_path}
+      %br If you wish to register a new account you can follow the registration below
+=render template: 'users/new'

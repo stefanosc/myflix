@@ -38,7 +38,7 @@ RSpec.describe InvitesController, :type => :controller do
 
       context 'sends an email' do
         it "to the invitee" do
-          expect(ActionMailer::Base.deliveries).not_to be_empty
+          expect(ActionMailer::Base.deliveries.last.to).to eq(['erik@example.com'])
         end
 
         it "conatins the link to register with the token" do
@@ -51,6 +51,7 @@ RSpec.describe InvitesController, :type => :controller do
 
     context 'with invalid attributes' do
       before do
+        ActionMailer::Base.deliveries.clear
         get :create, invite: { invitee_name: "Erik",
                                invitee_email: "@example.com",
                                message: "you will love this site dear Erik, love"
@@ -59,6 +60,10 @@ RSpec.describe InvitesController, :type => :controller do
 
       it "renders the :new template" do
         expect(response).to render_template :new
+      end
+
+      it "it does not send an email" do
+        expect(ActionMailer::Base.deliveries).to be_empty
       end
     end
 
