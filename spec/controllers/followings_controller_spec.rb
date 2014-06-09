@@ -14,7 +14,7 @@ describe FollowingsController do
 
       let(:user1) { Fabricate(:user) }
       before do
-        post :create, id: user1.id, name: user1.name
+        post :create, token: user1.token, name: user1.name
       end
 
       it "adds the selected user to current_user followed_users" do
@@ -32,12 +32,12 @@ describe FollowingsController do
 
     context 'when user is trying to follow him/her self' do
       it "does not save the following" do
-        post :create, id: current_user.id, name: current_user.name
+        post :create, token: current_user.token, name: current_user.name
         expect(Following.all.count).to eq(0)
       end
     end
 
-    context 'with invalid user id' do
+    context 'with invalid user token' do
 
       before do
         post :create
