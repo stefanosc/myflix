@@ -13,7 +13,7 @@ class UsersController < ApplicationController
     elsif invite = Invite.where(token: params[:invite_token]).first
       @user.invite_token, @user.name, @user.email =  invite.token, invite.invitee_name, invite.invitee_email
     else
-      flash.now[:success] = "It appears you clicked on an incomplete invitation link, if you received an invitation you can try clicking again on the register link or simply go ahead and register below"
+      flash.now[:success] = "It appears you clicked on an incomplete invitation link. if you received an invitation, you can try clicking again on the register link or simply go ahead and register below"
     end
     render :new
   end
