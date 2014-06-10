@@ -12,3 +12,9 @@ shared_examples "redirects to invalid token page with invalid token" do
     expect(response).to redirect_to(invalid_token_path)
   end
 end
+
+shared_examples "tokenable" do
+  it "generates a new random token when the object is created" do
+    expect(object.token).to be_present
+  end
+end
