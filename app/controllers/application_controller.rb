@@ -5,15 +5,15 @@ class ApplicationController < ActionController::Base
 
   def current_user
     @current_user ||= User.find_by(id: session[:user]) if session[:user]
-  end 
+  end
 
   def logged_in?
     !!current_user
   end
 
   def require_user
-    redirect_to sign_in_path unless current_user 
+    redirect_to sign_in_path unless current_user
     session[:referer] = request.path
-  end 
+  end
 
 end
