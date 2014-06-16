@@ -13,4 +13,11 @@ class AppMailer < ActionMailer::Base
     mail to: email_with_name, subject: 'Password Reset Request'
   end
 
+  def invite_friend(invite, inviter_name)
+    @invite = invite
+    @inviter_name = inviter_name
+    email_with_name = "#{@invite.invitee_name} <#{@invite.invitee_email}>"
+    mail to: email_with_name, subject: "#{@inviter_name} invites you to join LoveFlix"
+  end
+
 end

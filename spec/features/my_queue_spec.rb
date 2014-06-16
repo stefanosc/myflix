@@ -18,7 +18,7 @@ feature "my_queue" do
     click_on "video1"
     expect(page).to have_content "video1"
     expect(page).not_to have_content "+ My Queue"
-    
+
     visit home_path
     find(:xpath, "//a[@href='/videos/video2']").click
     click_on "+ My Queue"

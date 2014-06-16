@@ -16,6 +16,9 @@ module Myflix
     config.generators do |g|
       g.orm :active_record
       g.template_engine :haml
+      g.stylesheets     false
+      g.javascripts     false
+      g.helper     false
       g.test_framework :rspec,
       fixtures: true,
       view_specs: false,

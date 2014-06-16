@@ -10,6 +10,55 @@ describe UsersController do
     end
   end
 
+  describe "GET 'new_with_invitation" do
+    it "renders the :new template" do
+      get :new_with_invitation, invite_token: "ljlkj"
+      expect(response).to render_template('new')
+    end
+
+    it "instantiate a new @user instance" do
+      get :new_with_invitation, invite_token: "lkhj"
+      expect(assigns(:user)).to be_new_record
+    end
+
+    context "with valid invite_token" do
+      context "and it has already been used" do
+        let(:invite) { Fabricate(:invite) }
+        before do
+          Fabricate(:user, invite_token: invite.token )
+          get :new_with_invitation, invite_token: invite.token
+        end
+
+        it "renders the used_token template" do
+          expect(response).to render_template('used_token')
+        end
+      end
+
+      context "and it has not been used" do
+        let(:invite) { Fabricate(:invite) }
+        before { get :new_with_invitation, invite_token: invite.token }
+
+        it "pre populates @user.name" do
+          expect(assigns(:user).name).to eq(invite.invitee_name)
+        end
+        it "pre populates @user.email" do
+          expect(assigns(:user).email).to eq(invite.invitee_email)
+        end
+        it "pre populates @user.invite_token" do
+          expect(assigns(:user).invite_token).to eq(invite.token)
+        end
+      end
+    end
+
+    context "with invalid invite_token" do
+      it "sets a flash message" do
+        get :new_with_invitation, invite_token: "lkhj"
+        expect(flash[:success]).to be_present
+      end
+    end
+
+  end
+
   describe "POST #create" do
 
     context "with a valid user" do
@@ -41,6 +90,27 @@ describe UsersController do
         it "with correct content" do
           message = ActionMailer::Base.deliveries.last
           expect(message.parts[0].body.raw_source).to  include("Welcome to LoveFlix, we really appreciate")
+        end
+      end
+
+      context "and the user was invited" do
+        let(:inviter) { Fabricate(:user) }
+        let(:invite) { Fabricate(:invite, inviter_id: inviter.id) }
+        before do
+          password = Faker::Lorem.characters(10)
+          post :create,  user: { name: invite.invitee_name,
+                                 email: invite.invitee_email,
+                                 password: password,
+                                 invite_token: invite.token }
+          @user = User.where(invite_token: invite.token).first
+        end
+
+        it "the user becomes follower of the inviter" do
+          expect(@user.followers).to include(inviter)
+        end
+
+        it "the inviter becomes follower of the user" do
+          expect(inviter.followers).to include(@user)
         end
       end
     end

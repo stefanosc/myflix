@@ -7,10 +7,11 @@ class FollowingsController < ApplicationController
 
   def create
 
-    if current_user.id == params[:id].to_i
+    if current_user.token == params[:token]
       flash[:danger] = "You can't follow yourself"
     else
-      following = current_user.followings.build(followed_user_id: params[:id] )
+      user = User.find_by(token: params[:token])
+      following = current_user.followings.build(followed_user_id: user.try(:id) )
 
       if following.save
         flash[:success] = "You are now following #{params[:name]}"

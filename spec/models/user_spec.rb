@@ -8,6 +8,7 @@ describe User do
   it { should have_many(:followers) }
   it { should have_many(:followings) }
   it { should have_many(:followed_users) }
+  it { should have_many(:invites) }
 
   describe "#in_my_queue?" do
     let(:video1) { Fabricate(:video) }
@@ -16,12 +17,15 @@ describe User do
     before { Fabricate(:queue_item, video: video2, user: user) }
 
     it "returns true if the video is in the user queue_items" do
-      expect(user.in_my_queue?(video2)).to be_true
+      expect(user.in_my_queue?(video2)).to be true
     end
     it "returns false if the video is not in the user queue_items" do
-      expect(user.in_my_queue?(video1)).to be_false
+      expect(user.in_my_queue?(video1)).to be false
     end
   end
 
+  it_behaves_like "tokenable" do
+    let(:object) { Fabricate(:user) }
+  end
 
 end
