@@ -12,6 +12,9 @@ gem 'jquery-rails'
 gem 'bcrypt-ruby', '~> 3.1.2'
 gem "figaro"
 gem 'roadie'
+gem 'sidekiq'
+gem 'foreman'
+gem 'unicorn'
 
 group :development do
   gem 'sqlite3'
