@@ -27,7 +27,7 @@ class UsersController < ApplicationController
         invite.inviter.followers << @user
       end
       flash[:success] = "You have successfully registered"
-      AppMailer.welcome_email(@user).deliver
+      AppMailer.delay.welcome_email(@user)
       redirect_to sign_in_path
     else
       render :new
