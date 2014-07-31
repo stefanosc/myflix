@@ -12,6 +12,9 @@ gem 'jquery-rails'
 gem 'bcrypt-ruby', '~> 3.1.2'
 gem "figaro"
 gem 'roadie'
+gem 'sidekiq'
+gem 'foreman'
+gem 'unicorn'
 
 group :development do
   gem 'sqlite3'
@@ -19,11 +22,13 @@ group :development do
   # gem "better_errors"
   gem "binding_of_caller"
   gem 'letter_opener'
+  gem 'paratrooper'
 end
 
-group :production do
+group :production, :staging do
   gem 'pg'
   gem 'rails_12factor'
+  gem "sentry-raven"
 end
 
 group :development, :test do
