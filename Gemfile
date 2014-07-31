@@ -22,11 +22,13 @@ group :development do
   # gem "better_errors"
   gem "binding_of_caller"
   gem 'letter_opener'
+  gem 'paratrooper'
 end
 
-group :production do
+group :production, :staging do
   gem 'pg'
   gem 'rails_12factor'
+  gem "sentry-raven"
 end
 
 group :development, :test do
