@@ -1,6 +1,6 @@
 class StagingEmailInterceptor
   def self.delivering_email(message)
-    message.to = ['loveflix99@gmail']
+    message.to = ['loveflix99@gmail.com']
   end
 end
 
