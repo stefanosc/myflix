@@ -29,6 +29,8 @@ group :production, :staging do
   gem 'pg'
   gem 'rails_12factor'
   gem "sentry-raven"
+  gem 'sinatra', require: false
+  gem 'slim'
 end
 
 group :development, :test do
