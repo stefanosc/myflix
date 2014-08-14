@@ -15,6 +15,8 @@ gem 'roadie'
 gem 'sidekiq'
 gem 'foreman'
 gem 'unicorn'
+gem 'carrierwave'
+gem 'fog'
 
 group :development do
   gem 'sqlite3'
