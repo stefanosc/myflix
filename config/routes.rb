@@ -1,6 +1,6 @@
 Myflix::Application.routes.draw do
 
-  resources :videos, except:[:destroy, :index] do
+  resources :videos, only:[:show] do
     collection do
       get 'search', to: 'videos#search'
     end
