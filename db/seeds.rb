@@ -18,14 +18,14 @@ end
 
 Dir.glob('public/tmp/*.jpg').sort.each do |image|
   unless image.match("large")
-    movie_title = File.basename(image,'.jpg').gsub('_', ' ').titleize 
+    movie_title = File.basename(image,'.jpg').gsub('_', ' ').titleize
     movie_thumbnail = image.gsub('public', '')
   end
   categories = Category.all
-  video = Video.create(title: movie_title, 
-              description: "#{movie_title} is just awesome. Enjoy your membership", 
-              small_cover_url: movie_thumbnail, 
-              large_cover_url: "/tmp/monk_large.jpg", 
+  video = Video.create(title: movie_title,
+              description: "#{movie_title} is just awesome. Enjoy your membership",
+              small_cover: movie_thumbnail,
+              large_cover: "/tmp/monk_large.jpg",
               category_id: categories[rand(3)].id )
 end
 
