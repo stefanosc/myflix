@@ -4,12 +4,12 @@ class Admin::VideosController < AdminsController
   end
 
   def create
-        # TODO
     @video = Video.new(video_params)
     if @video.save
       flash[:success] = "Successfully created video"
-      redirect_to home_path
+      redirect_to new_admin_video_path
     else
+      flash[:danger] = "Please fix the errors highlighted below"
       render :new
     end
   end
@@ -17,6 +17,6 @@ class Admin::VideosController < AdminsController
   private
 
   def video_params
-    params.require(:video).permit(:title, :category_id, :description, :large_cover_url, :small_cover_url)
+    params.require(:video).permit(:title, :category_id, :description, :large_cover, :small_cover)
   end
 end

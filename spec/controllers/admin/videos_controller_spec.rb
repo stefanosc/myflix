@@ -17,31 +17,30 @@ RSpec.describe Admin::VideosController, :type => :controller do
     end
   end
 
-  describe "GET 'create'" do
+  describe "POST 'create'" do
 
     context 'with valid attributes' do
       before do
-        # TODO
-        small_cover = File.new(Rails.root + "spec/support/thor_dark_world.jpg")
-        large_cover = File.new(Rails.root + "spec/support/monk_large.jpg")
-        get :create, video: { title: "Thor Dark World",
+        # small_cover = File.new(Rails.root + "public/tmp/thor_dark_world.jpg")
+        # large_cover = File.new(Rails.root + "public/tmp/monk_large.jpg")
+        post :create, video: { title: "Thor Dark World",
                               category_id: ( Fabricate(:category).id ),
                               description: "This is a cool action movie",
-                              large_cover: ActionDispatch::Http::UploadedFile.new(
-                                tempfile: large_cover,
-                                filename: File.basename(large_cover),
-                                type: "image/jpeg"),
-                              small_cover: ActionDispatch::Http::UploadedFile.new(
-                                tempfile: small_cover,
-                                filename: File.basename(small_cover),
-                                type: "image/jpeg")
+                              # large_cover: ActionDispatch::Http::UploadedFile.new(
+                              #   tempfile: large_cover,
+                              #   filename: File.basename(large_cover),
+                              #   type: "image/jpeg"),
+                              # small_cover: ActionDispatch::Http::UploadedFile.new(
+                              #   tempfile: small_cover,
+                              #   filename: File.basename(small_cover),
+                              #   type: "image/jpeg")
                             }
       end
-      it "redirects to home_path" do
-        expect(response).to redirect_to(home_path)
+      it "redirects to new_admin_video_path" do
+        expect(response).to redirect_to(new_admin_video_path)
       end
 
-      it "saves the invite details" do
+      it "saves the video details" do
         expect(Video.all.size).to eq(1)
       end
 
@@ -53,10 +52,21 @@ RSpec.describe Admin::VideosController, :type => :controller do
 
     context 'with invalid attributes' do
       before do
+        post :create, video: { title: "Thor Dark World",
+                      description: "This is a cool action movie" }
       end
 
       it "renders the :new template" do
         expect(response).to render_template :new
+      end
+      it "sets the @video variable" do
+        expect(assigns(:video)).to be_truthy
+      end
+      it "renders the :new template" do
+        expect(flash[:danger]).not_to be_nil
+      end
+      it "renders the :new template" do
+        expect(Video.all.count).to eq(0)
       end
     end
   end
