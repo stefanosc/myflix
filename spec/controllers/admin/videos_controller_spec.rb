@@ -21,19 +21,9 @@ RSpec.describe Admin::VideosController, :type => :controller do
 
     context 'with valid attributes' do
       before do
-        # small_cover = File.new(Rails.root + "public/tmp/thor_dark_world.jpg")
-        # large_cover = File.new(Rails.root + "public/tmp/monk_large.jpg")
         post :create, video: { title: "Thor Dark World",
                               category_id: ( Fabricate(:category).id ),
-                              description: "This is a cool action movie",
-                              # large_cover: ActionDispatch::Http::UploadedFile.new(
-                              #   tempfile: large_cover,
-                              #   filename: File.basename(large_cover),
-                              #   type: "image/jpeg"),
-                              # small_cover: ActionDispatch::Http::UploadedFile.new(
-                              #   tempfile: small_cover,
-                              #   filename: File.basename(small_cover),
-                              #   type: "image/jpeg")
+                              description: "This is a cool action movie"
                             }
       end
       it "redirects to new_admin_video_path" do
