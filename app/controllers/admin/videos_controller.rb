@@ -4,7 +4,8 @@ class Admin::VideosController < AdminsController
   end
 
   def create
-    @video = Video.new(video_params)
+    category = Category.find(video_params[:category])
+    @video = Video.new(video_params.merge(category: category))
     if @video.save
       flash[:success] = "Successfully created video"
       redirect_to new_admin_video_path
@@ -16,6 +17,6 @@ class Admin::VideosController < AdminsController
   private
 
   def video_params
-    params.require(:video).permit(:title, :category_id, :description, :large_cover, :small_cover)
+    params.require(:video).permit(:title, :description, :category, :large_cover, :small_cover, :remote_video_url)
   end
 end
