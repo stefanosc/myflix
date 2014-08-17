@@ -2,23 +2,9 @@
   .container
     .row
       .col-md-10.col-md-offset-1
-        = bootstrap_form_for(@video, url: admin_videos_path, layout: :horizontal, label_col: "col-sm-3", control_col: "col-sm-6", multipart: true) do |f|
-          %ul.nav.nav-tabs
-            %li
-              %a(href="#") Recent Payments
-            %li{ class: @video && "active" }
-              %a(href="#") Add a New Video
-          %br
-          = f.alert_message "Please fix the errors below."
-          %fieldset
-            = f.text_field :title, label: "Title"
-            = f.select :category, Category.all.collect { |c| [ c.name, c.id ] }, include_blank: true
-            = f.text_area :description, { label: "Description", rows: 8 }
-            = f.file_field :large_cover, { label: "Large Cover", type: "file", class: "form-control" }
-            = f.hidden_field :large_cover_cache
-            = f.file_field :small_cover, { label: "Small Cover", type: "file", class: "form-control" }
-            = f.hidden_field :small_cover_cache
-            = f.text_field :video_url, label: "Video url"
-          %fieldset.actions.form-group
-            .col-sm-6.col-md-offset-3
-              %input(type="submit" value="Add Video" class="btn btn-default")
+        %ul.nav.nav-tabs
+          %li
+            %a(href="#") Recent Payments
+          %li{ class: @video && "active" }
+            %a(href="#") Add a New Video
+        = @video ? (render 'new_admin_video_form') : (nil)
