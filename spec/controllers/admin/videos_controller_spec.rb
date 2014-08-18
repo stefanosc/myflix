@@ -22,7 +22,7 @@ RSpec.describe Admin::VideosController, :type => :controller do
     context 'with valid attributes' do
       before do
         post :create, video: { title: "Thor Dark World",
-                              category_id: ( Fabricate(:category).id ),
+                              category: ( Fabricate(:category).id ),
                               description: "This is a cool action movie"
                             }
       end
@@ -52,10 +52,7 @@ RSpec.describe Admin::VideosController, :type => :controller do
       it "sets the @video variable" do
         expect(assigns(:video)).to be_truthy
       end
-      it "renders the :new template" do
-        expect(flash[:danger]).not_to be_nil
-      end
-      it "renders the :new template" do
+      it "does not save the video" do
         expect(Video.all.count).to eq(0)
       end
     end
