@@ -1,7 +1,6 @@
-class VideosController < ApplicationController
+class VideosController < UserAuthenticationController
 
   before_action :find_video, only: [:show]
-  before_action :require_user
 
 
   def index

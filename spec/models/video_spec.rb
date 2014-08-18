@@ -30,14 +30,14 @@ describe Video do
     it "returns an empty array if searched for empty string" do
       c = Category.create(name: "monk category", description: "category description")
       v = Video.create(title: "this is a Future movie", description: "this is the future description", category: c )
-      expect(Video.search_by_title('')).to eq([])   
+      expect(Video.search_by_title('')).to eq([])
     end
 
     it "returns an array of matches ordered by created_at" do
       c = Category.create(name: "monk category", description: "category description")
       v = Video.create(title: "this is a Monk movie", description: "this is the monk description", category: c, created_at: 1.day.ago )
       v1 = Video.create(title: "this is a Future movie", description: "this is the future description", category: c )
-      expect(Video.search_by_title('movie').first).to eq(v1)         
+      expect(Video.search_by_title('movie').first).to eq(v1)
     end
 
   end

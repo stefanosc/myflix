@@ -1,6 +1,6 @@
 Myflix::Application.routes.draw do
 
-  resources :videos, except:[:destroy, :index] do
+  resources :videos, only:[:show] do
     collection do
       get 'search', to: 'videos#search'
     end
@@ -34,6 +34,10 @@ Myflix::Application.routes.draw do
 
   get 'confirm_password_reset', to: 'password_resets#confirm_password_reset'
   get 'invalid_token', to: 'password_resets#invalid_token'
+
+  namespace :admin do
+    resources :videos, only:[:new, :create]
+  end
 
   root to: 'pages#front'
   get 'home', to: 'videos#index'
