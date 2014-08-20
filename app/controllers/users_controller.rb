@@ -20,20 +20,20 @@ class UsersController < ApplicationController
 
   def create
     @user = User.new(user_params)
-    require 'pry'; binding.pry
-    charge_payment
 
-    if @user.save
-      if invite = Invite.where(token: user_params[:invite_token]).first
-        @user.followers << invite.inviter
-        invite.inviter.followers << @user
+    begin
+      if save_and_charge_payment
+        handle_invitation
+        AppMailer.delay.welcome_email(@user)
+
+        flash[:success] = "Thank you for signing up ♥︎"
+        redirect_to sign_in_path
       end
-      flash[:success] += "You have successfully registered"
-      AppMailer.delay.welcome_email(@user)
-      redirect_to sign_in_path
-    else
+    rescue ActiveRecord::RecordInvalid, Stripe::CardError => e
+      flash[:danger] = "#{e.message}" if e.class.parent == Stripe
       render :new
     end
+
   end
 
   def show
@@ -53,20 +53,25 @@ class UsersController < ApplicationController
     User.where(invite_token: params[:invite_token]).present?
   end
 
-  def charge_payment
-    Stripe.api_key = ENV["STRIPE_API_KEY"]
-    token = params[:stripeToken]
+  def handle_invitation
+    if invite = Invite.where(token: user_params[:invite_token]).first
+      @user.followers << invite.inviter
+      invite.inviter.followers << @user
+    end
+  end
 
-    begin
+  def save_and_charge_payment
+    ActiveRecord::Base.transaction do
+      @user.save!
+
+      Stripe.api_key = ENV["STRIPE_API_KEY"]
+      token = params[:stripeToken]
+
       charge = Stripe::Charge.create(
         :amount => 999,
         :currency => "usd",
         :card => token
       )
-      flash[:success] = "Thank you for your payment\n"
-    rescue Stripe::CardError => e
-      flash[:danger] = "#{e.message}"
-      render :new and return
     end
   end
 
