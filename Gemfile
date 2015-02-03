@@ -53,4 +53,6 @@ group :test do
   gem "selenium-webdriver"
   gem "fivemat", '1.2.1'
   gem 'fabrication'
+  gem 'vcr'
+  gem 'webmock'
 end
