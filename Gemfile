@@ -51,6 +51,7 @@ group :test do
   gem "launchy"
   gem 'shoulda-matchers'
   gem "selenium-webdriver", '2.45.0.dev3'
+  gem 'poltergeist', require: false
   gem "fivemat", '1.2.1'
   gem 'fabrication'
   gem 'vcr'
