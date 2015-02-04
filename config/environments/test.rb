@@ -15,7 +15,7 @@ Myflix::Application.configure do
 
   config.action_mailer.delivery_method = :test
   config.action_mailer.default_options = { from: "LoveFLIX <loveflix99@gmail.com>" }
-  config.action_mailer.default_url_options = { host: "localhost" }
+  config.action_mailer.default_url_options = { host: "localhost:52662" }
 
   config.active_support.deprecation = :stderr
 end

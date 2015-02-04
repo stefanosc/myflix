@@ -60,11 +60,15 @@ describe UsersController do
   end
 
   describe "POST #create" do
-
+    before do
+      charge = double('charge')
+      allow(charge).to receive(:successful?) { true }
+      allow(StripeWrapper::Charge).to receive(:create) { charge }
+    end
     context "with a valid user" do
 
       let(:user) { Fabricate.attributes_for(:user) }
-      before { post :create,  user: user }
+      before { post :create,  user: user, stripeToken: "fake_token" }
 
       it "it saves the user to the database" do
         expect(User.count).to eq(1)
@@ -78,7 +82,7 @@ describe UsersController do
 
       context 'sends welcome email' do
         let(:user) { Fabricate.attributes_for(:user) }
-        before { post :create,  user: user }
+        before { post :create,  user: user, stripeToken: "fake_token" }
 
         it "delivers email" do
           expect(ActionMailer::Base.deliveries).not_to be_empty
@@ -98,9 +102,10 @@ describe UsersController do
         let(:invite) { Fabricate(:invite, inviter_id: inviter.id) }
         before do
           password = Faker::Lorem.characters(10)
-          post :create,  user: { name: invite.invitee_name,
-                                 email: invite.invitee_email,
-                                 password: password,
+          post :create,  stripeToken: "fake_token",
+                         user: { name:         invite.invitee_name,
+                                 email:        invite.invitee_email,
+                                 password:     password,
                                  invite_token: invite.token }
           @user = User.where(invite_token: invite.token).first
         end
@@ -118,7 +123,8 @@ describe UsersController do
     context "with an invalid user" do
       let(:user) { Fabricate.attributes_for(:user, name: "")}
       before do
-        post :create,  user: user
+        post :create,  user: user,
+                       stripeToken: "fake_token"
       end
 
       it "does not create the user" do

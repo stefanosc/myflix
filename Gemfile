@@ -50,7 +50,7 @@ group :test do
   gem "database_cleaner"
   gem "launchy"
   gem 'shoulda-matchers'
-  gem "selenium-webdriver"
+  gem "selenium-webdriver", '2.45.0.dev3'
   gem "fivemat", '1.2.1'
   gem 'fabrication'
   gem 'vcr'

@@ -1,13 +1,13 @@
 require "spec_helper"
 
-feature "Password Reset" do
+feature "Invite Friend" do
   let(:user) { Fabricate(:user) }
   let(:friend_attrs) { Fabricate.attributes_for(:user) }
   background do
     clear_emails
   end
 
-  scenario "user resets password" do
+  scenario "user invites friends and friend signs up", { js: true, vcr: true  } do
     user_sends_invitation
 
     friend_opens_email_registers_sign_in
@@ -38,6 +38,10 @@ def friend_opens_email_registers_sign_in
   open_email(friend_attrs[:email])
   current_email.find(:xpath, "//a[contains(@href, 'register')]").click
   fill_in 'Password', with: friend_attrs[:password]
+  fill_in "Credit Card Number",  with: "4242424242424242"
+  fill_in "Security Code",  with: "123"
+  select('12 - December', :from => 'date_month')
+  select('2017', :from => 'date_year')
   click_on 'Sign Up'
   fill_in 'email', with: friend_attrs[:email]
   fill_in 'password', with: friend_attrs[:password]
