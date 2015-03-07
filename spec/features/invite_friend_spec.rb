@@ -1,4 +1,5 @@
 require "spec_helper"
+Capybara.default_wait_time = 20
 
 feature "Invite Friend" do
   let(:user) { Fabricate(:user) }
@@ -13,13 +14,13 @@ feature "Invite Friend" do
     friend_opens_email_registers_sign_in
     visit people_path
 
-    expect(page).to have_content("#{user.name}")
+    expect(page).to have_text("#{user.name}")
 
     visit sign_out_path
     sign_in(user)
     visit people_path
 
-    expect(page).to have_content("#{friend_attrs[:name]}")
+    expect(page).to have_text("#{friend_attrs[:name]}")
   end
 
 end
@@ -43,7 +44,7 @@ def friend_opens_email_registers_sign_in
   select('12 - December', :from => 'date_month')
   select('2017', :from => 'date_year')
   click_on 'Sign Up'
-  sleep 8
+  expect(page).to have_text("Sign in")
   fill_in 'Email', with: friend_attrs[:email]
   fill_in 'Password', with: friend_attrs[:password]
   click_button 'Sign in'
