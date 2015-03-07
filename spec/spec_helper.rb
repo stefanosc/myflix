@@ -6,6 +6,15 @@ require 'capybara/rspec'
 require 'capybara/email/rspec'
 require 'sidekiq/testing'
 require 'vcr'
+require 'capybara/poltergeist'
+
+Capybara.register_driver :poltergeist do |app|
+  Capybara::Poltergeist::Driver.new(app, {
+    phantomjs_options: ['--ignore-ssl-errors=yes', '--ssl-protocol=any'],
+    timeout: 240
+  })
+end
+Capybara.javascript_driver = :poltergeist
 
 Capybara.server_port = 52662
 

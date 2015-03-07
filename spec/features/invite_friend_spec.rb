@@ -7,7 +7,7 @@ feature "Invite Friend" do
     clear_emails
   end
 
-  scenario "user invites friends and friend signs up", { js: true, vcr: true  } do
+  scenario "user invites friends and friend signs up", { vcr: true, js: true } do
     user_sends_invitation
 
     friend_opens_email_registers_sign_in
@@ -43,8 +43,9 @@ def friend_opens_email_registers_sign_in
   select('12 - December', :from => 'date_month')
   select('2017', :from => 'date_year')
   click_on 'Sign Up'
-  fill_in 'email', with: friend_attrs[:email]
-  fill_in 'password', with: friend_attrs[:password]
+  sleep 8
+  fill_in 'Email', with: friend_attrs[:email]
+  fill_in 'Password', with: friend_attrs[:password]
   click_button 'Sign in'
 end
 
