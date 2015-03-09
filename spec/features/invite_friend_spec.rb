@@ -43,10 +43,10 @@ def friend_opens_email_registers_sign_in
   fill_in "Security Code",  with: "123"
   select('12 - December', :from => 'date_month')
   select('2017', :from => 'date_year')
-  click_on 'Sign Up'
+  find("input[value='Sign Up']").trigger('click')
   expect(page).to have_text("Sign in")
   fill_in 'Email', with: friend_attrs[:email]
   fill_in 'Password', with: friend_attrs[:password]
-  click_button 'Sign in'
+  find("input[value='Sign in']").trigger('click')
 end
 
