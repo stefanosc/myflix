@@ -64,10 +64,10 @@ describe UsersController do
     context "with a valid user but declined card" do
       let(:charge) { double('charge', successful?: false, error_message: "Card declined") }
 
-      let(:user) { Fabricate.attributes_for(:user) }
+      let(:user_attrs) { Fabricate.attributes_for(:user) }
       before do
         expect(StripeWrapper::Charge).to receive(:create) { charge }
-        post :create,  user: user, stripeToken: "fake_token"
+        post :create,  user: user_attrs, stripeToken: "fake_token"
       end
 
       it "does NOT save the user to the database" do
@@ -83,10 +83,10 @@ describe UsersController do
 
     context "with a valid user" do
       let(:charge) { double('charge', successful?: true) }
-      let(:user) { Fabricate.attributes_for(:user) }
+      let(:user_attrs) { Fabricate.attributes_for(:user) }
       before do
         expect(StripeWrapper::Charge).to receive(:create) { charge }
-        post :create,  user: user, stripeToken: "fake_token"
+        post :create,  user: user_attrs, stripeToken: "fake_token"
       end
 
       it "it saves the user to the database" do
@@ -100,9 +100,9 @@ describe UsersController do
       end
 
       context 'sends welcome email' do
-        let(:user) { Fabricate.attributes_for(:user) }
+        let(:user_attrs) { Fabricate.attributes_for(:user) }
         before do
-          post :create,  user: user, stripeToken: "fake_token"
+          post :create,  user: user_attrs, stripeToken: "fake_token"
         end
 
         it "delivers email" do
@@ -110,7 +110,7 @@ describe UsersController do
         end
         it "to the correct user" do
           message = ActionMailer::Base.deliveries.last
-          expect(message.to.first).to  eq(user[:email])
+          expect(message.to.first).to  eq(user_attrs[:email])
         end
         it "with correct content" do
           message = ActionMailer::Base.deliveries.last
@@ -144,10 +144,10 @@ describe UsersController do
     end
 
     context "with an invalid user" do
-      let(:user) { Fabricate.attributes_for(:user, name: "")}
+      let(:user_attrs) { Fabricate.attributes_for(:user, name: "")}
       before do
         expect(StripeWrapper::Charge).not_to receive(:create)
-        post :create,  user: user,
+        post :create,  user: user_attrs,
                        stripeToken: "fake_token"
       end
 
