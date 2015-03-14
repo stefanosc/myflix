@@ -9,7 +9,6 @@ module StripeWrapper
     end
 
     def self.create(opts={})
-      set_api_key
       begin
         response = Stripe::Charge.create(
           currency:  'usd',
@@ -30,8 +29,5 @@ module StripeWrapper
       response.message
     end
 
-    def self.set_api_key
-      Stripe.api_key = ENV["STRIPE_API_KEY"]
-    end
   end
 end

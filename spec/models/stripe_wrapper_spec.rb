@@ -3,7 +3,6 @@ require 'rails_helper'
 RSpec.describe StripeWrapper, type: :model do
   describe StripeWrapper::Charge do
     describe '.create' do
-      before { StripeWrapper::Charge.set_api_key }
       let(:token) do
         Stripe::Token.create(
           card: {
