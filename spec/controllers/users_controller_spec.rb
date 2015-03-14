@@ -70,14 +70,11 @@ describe UsersController do
         post :create,  user: user_attrs, stripeToken: "fake_token"
       end
 
+      it { is_expected.to render_template :new }
+      it { is_expected.to set_flash[:danger] }
+
       it "does NOT save the user to the database" do
         expect(User.count).to eq(0)
-      end
-      it "renders the :new template" do
-        expect(response).to render_template :new
-      end
-      it "sets a flash error message" do
-        expect(flash[:danger]).not_to be nil
       end
     end
 
