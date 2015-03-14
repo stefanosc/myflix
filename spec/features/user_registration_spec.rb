@@ -1,5 +1,4 @@
 require "spec_helper"
-Capybara.default_wait_time = 10
 
 feature "user registration", { vcr: true, js: true } do
   let(:valid_user_attrs) { Fabricate.attributes_for(:user) }
@@ -10,7 +9,6 @@ feature "user registration", { vcr: true, js: true } do
   background do
     visit register_path
   end
-
 
   scenario "with a valid user and credit card" do
     register(valid_user_attrs, valid_card)
@@ -43,7 +41,6 @@ feature "user registration", { vcr: true, js: true } do
   end
 end
 
-
 def register(user_attrs, card)
   fill_in 'Email Address', with: user_attrs[:email]
   fill_in 'Password', with: user_attrs[:password]
@@ -54,8 +51,3 @@ def register(user_attrs, card)
   select('2017', :from => 'date_year')
   click_on 'Sign Up'
 end
-
-  # expect(page).to have_text("Sign in")
-  # fill_in 'Email', with: user_attrs[:email]
-  # fill_in 'Password', with: user_attrs[:password]
-  # click_button 'Sign in'

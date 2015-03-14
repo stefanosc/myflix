@@ -1,5 +1,4 @@
 require "spec_helper"
-Capybara.default_wait_time = 20
 
 feature "Invite Friend" do
   let(:user) { Fabricate(:user) }

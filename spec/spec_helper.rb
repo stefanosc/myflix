@@ -14,8 +14,9 @@ Capybara.register_driver :poltergeist do |app|
     timeout: 240
   })
 end
-Capybara.javascript_driver = :poltergeist
 
+Capybara.javascript_driver = :poltergeist
+Capybara.default_wait_time = 9
 Capybara.server_port = 52662
 
 VCR.configure do |c|
