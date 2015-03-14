@@ -19,13 +19,13 @@
           %fieldset.credit_card
             .payment-errors
             .form-group
-              %label.control-label.col-sm-2 Credit Card Number
+              %label.control-label.col-sm-2(for="credit-card") Credit Card Number
               .col-sm-6
-                %input.form-control{data: { stripe: "number" } }(type="text")
+                %input.form-control#credit-card{data: { stripe: "number" } }(type="text")
             .form-group
-              %label.control-label.col-sm-2 Security Code
+              %label.control-label.col-sm-2(for="security-code") Security Code
               .col-sm-6
-                %input.form-control{data: { stripe: "cvc" } }(type="text")
+                %input.form-control#security-code{data: { stripe: "cvc" } }(type="text")
             .form-group
               %label.control-label.col-sm-2 Expiration
               .col-sm-3

@@ -61,10 +61,30 @@ describe UsersController do
 
   describe "POST #create" do
 
-    context "with a valid user" do
+    context "with a valid user but declined card" do
+      let(:charge) { double('charge', successful?: false, error_message: "Card declined") }
 
-      let(:user) { Fabricate.attributes_for(:user) }
-      before { post :create,  user: user }
+      let(:user_attrs) { Fabricate.attributes_for(:user) }
+      before do
+        expect(StripeWrapper::Charge).to receive(:create) { charge }
+        post :create,  user: user_attrs, stripeToken: "fake_token"
+      end
+
+      it { is_expected.to render_template :new }
+      it { is_expected.to set_flash[:danger] }
+
+      it "does NOT save the user to the database" do
+        expect(User.count).to eq(0)
+      end
+    end
+
+    context "with a valid user" do
+      let(:charge) { double('charge', successful?: true) }
+      let(:user_attrs) { Fabricate.attributes_for(:user) }
+      before do
+        expect(StripeWrapper::Charge).to receive(:create) { charge }
+        post :create,  user: user_attrs, stripeToken: "fake_token"
+      end
 
       it "it saves the user to the database" do
         expect(User.count).to eq(1)
@@ -77,15 +97,17 @@ describe UsersController do
       end
 
       context 'sends welcome email' do
-        let(:user) { Fabricate.attributes_for(:user) }
-        before { post :create,  user: user }
+        let(:user_attrs) { Fabricate.attributes_for(:user) }
+        before do
+          post :create,  user: user_attrs, stripeToken: "fake_token"
+        end
 
         it "delivers email" do
           expect(ActionMailer::Base.deliveries).not_to be_empty
         end
         it "to the correct user" do
           message = ActionMailer::Base.deliveries.last
-          expect(message.to.first).to  eq(user[:email])
+          expect(message.to.first).to  eq(user_attrs[:email])
         end
         it "with correct content" do
           message = ActionMailer::Base.deliveries.last
@@ -94,13 +116,16 @@ describe UsersController do
       end
 
       context "and the user was invited" do
+        let(:charge) { double('charge', successful?: true) }
         let(:inviter) { Fabricate(:user) }
         let(:invite) { Fabricate(:invite, inviter_id: inviter.id) }
         before do
+          expect(StripeWrapper::Charge).to receive(:create) { charge }
           password = Faker::Lorem.characters(10)
-          post :create,  user: { name: invite.invitee_name,
-                                 email: invite.invitee_email,
-                                 password: password,
+          post :create,  stripeToken: "fake_token",
+                         user: { name:         invite.invitee_name,
+                                 email:        invite.invitee_email,
+                                 password:     password,
                                  invite_token: invite.token }
           @user = User.where(invite_token: invite.token).first
         end
@@ -116,9 +141,11 @@ describe UsersController do
     end
 
     context "with an invalid user" do
-      let(:user) { Fabricate.attributes_for(:user, name: "")}
+      let(:user_attrs) { Fabricate.attributes_for(:user, name: "")}
       before do
-        post :create,  user: user
+        expect(StripeWrapper::Charge).not_to receive(:create)
+        post :create,  user: user_attrs,
+                       stripeToken: "fake_token"
       end
 
       it "does not create the user" do

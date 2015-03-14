@@ -20,20 +20,20 @@ class UsersController < ApplicationController
 
   def create
     @user = User.new(user_params)
-
-    begin
-      if save_and_charge_payment
+    if @user.valid?
+      charge = charge_payment
+      if charge.successful?
+        @user.save
         handle_invitation
         AppMailer.delay.welcome_email(@user)
 
         flash[:success] = "Thank you for signing up ♥︎"
-        redirect_to sign_in_path
+        redirect_to sign_in_path and return
+      else
+        flash[:danger] = "#{charge.error_message}"
       end
-    rescue ActiveRecord::RecordInvalid, Stripe::CardError => e
-      flash[:danger] = "#{e.message}" if e.class.parent == Stripe
-      render :new
     end
-
+    render :new
   end
 
   def show
@@ -60,19 +60,13 @@ class UsersController < ApplicationController
     end
   end
 
-  def save_and_charge_payment
-    ActiveRecord::Base.transaction do
-      @user.save!
+  def charge_payment
+    token = params[:stripeToken]
 
-      Stripe.api_key = ENV["STRIPE_API_KEY"]
-      token = params[:stripeToken]
-
-      charge = Stripe::Charge.create(
-        :amount => 999,
-        :currency => "usd",
-        :card => token
-      )
-    end
+    StripeWrapper::Charge.create(
+      :amount => 999,
+      :card => token
+    )
   end
 
 end

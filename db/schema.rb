@@ -61,10 +61,6 @@ ActiveRecord::Schema.define(version: 20140817205321) do
   add_index "reviews", ["user_id"], name: "index_reviews_on_user_id"
   add_index "reviews", ["video_id"], name: "index_reviews_on_video_id"
 
-  create_table "test", id: false, force: true do |t|
-    t.text "name"
-  end
-
   create_table "users", force: true do |t|
     t.string   "name"
     t.string   "email"

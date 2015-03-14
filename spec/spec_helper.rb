@@ -5,6 +5,27 @@ require 'rspec/rails'
 require 'capybara/rspec'
 require 'capybara/email/rspec'
 require 'sidekiq/testing'
+require 'vcr'
+require 'capybara/poltergeist'
+
+Capybara.register_driver :poltergeist do |app|
+  Capybara::Poltergeist::Driver.new(app, {
+    phantomjs_options: ['--ignore-ssl-errors=yes', '--ssl-protocol=any'],
+    timeout: 240
+  })
+end
+
+Capybara.javascript_driver = :poltergeist
+Capybara.default_wait_time = 9
+Capybara.server_port = 52662
+
+VCR.configure do |c|
+  c.allow_http_connections_when_no_cassette = true
+  c.cassette_library_dir = 'spec/cassettes'
+  c.hook_into :webmock
+  c.configure_rspec_metadata!
+  c.ignore_localhost = true
+end
 
 Sidekiq::Testing.inline!
 
