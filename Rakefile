@@ -4,4 +4,6 @@
 
 require File.expand_path('../config/application', __FILE__)
 
+Knapsack.load_tasks if defined?(Knapsack)
+
 Myflix::Application.load_tasks

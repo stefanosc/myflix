@@ -135,6 +135,7 @@ GEM
       thor (>= 0.14, < 2.0)
     json (1.8.1)
     kgio (2.9.2)
+    knapsack (1.0.4)
     launchy (2.4.2)
       addressable (~> 2.3)
     letter_opener (1.2.0)
@@ -326,6 +327,7 @@ DEPENDENCIES
   foreman
   haml-rails
   jquery-rails
+  knapsack
   launchy
   letter_opener
   mini_magick
