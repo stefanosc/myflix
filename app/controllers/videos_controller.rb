@@ -19,7 +19,7 @@ class VideosController < UserAuthenticationController
   private
 
   def find_video
-    @video = Video.find_by_slug(params[:id])
+    @video = Video.find_by_slug(params[:id]).decorate
   end
 
 end

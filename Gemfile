@@ -17,6 +17,7 @@ gem 'foreman'
 gem 'unicorn'
 gem 'carrierwave'
 gem 'fog'
+gem 'draper'
 gem 'mini_magick'
 gem 'stripe'
 
