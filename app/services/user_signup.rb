@@ -1,12 +1,13 @@
 class UserSignup
 
-  attr_reader :user, :error_message
+  attr_reader :user, :error_message, :charge_token, :invite_token
 
-  def initialize(user, charge_token, invite_token)
+  def initialize(user:, charge_token:, invite_token:)
     @user = user
+    @charge_token = charge_token
+    @invite_token = invite_token
     @status = nil
     @error_message = nil
-    signup(charge_token, invite_token)
   end
 
   def successful?
@@ -17,14 +18,12 @@ class UserSignup
     "Thank you for signing up ♥︎"
   end
 
-  private
-
-  def signup(charge_token, invite_token)
+  def signup!
     if user.valid?
-      charge = charge_payment(charge_token)
+      charge = charge_payment
       if charge.successful?
         user.save
-        handle_invitation(invite_token)
+        handle_invitation
         AppMailer.delay.welcome_email(@user)
         @status = :success
       else
@@ -34,16 +33,19 @@ class UserSignup
     else
       @status = :error
     end
+    self
   end
 
-  def handle_invitation(invite_token)
+  private
+
+  def handle_invitation
     if invite = Invite.where(token: invite_token).first
       @user.followers << invite.inviter
       invite.inviter.followers << @user
     end
   end
 
-  def charge_payment(charge_token)
+  def charge_payment
     StripeWrapper::Charge.create(
       :amount => 999,
       :card => charge_token

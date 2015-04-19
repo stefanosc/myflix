@@ -8,7 +8,9 @@ RSpec.describe UserSignup do
     let(:user) { Fabricate.build(:user) }
     before do
       expect(StripeWrapper::Charge).to receive(:create) { charge }
-      UserSignup.new(user, "fake_token", nil)
+      UserSignup.new(user: user,
+                     charge_token: "fake_token",
+                     invite_token: nil).signup!
     end
 
     it "does NOT save the user to the database" do
@@ -21,7 +23,9 @@ RSpec.describe UserSignup do
     let(:user) { Fabricate.build(:user) }
     before do
       expect(StripeWrapper::Charge).to receive(:create) { charge }
-      UserSignup.new(user, "fake_token", nil)
+      UserSignup.new(user: user,
+                     charge_token: "fake_token",
+                     invite_token: nil).signup!
     end
 
     it "it saves the user to the database" do
@@ -32,7 +36,7 @@ RSpec.describe UserSignup do
       let(:user) { Fabricate.build(:user) }
       before do
         expect(StripeWrapper::Charge).to receive(:create) { charge }
-        UserSignup.new(user, "fake_token", nil)
+        UserSignup.new(user: user, charge_token: "fake_token", invite_token: nil).signup!
       end
 
       it "delivers email" do
@@ -58,7 +62,9 @@ RSpec.describe UserSignup do
                                             password: "pass") }
       before do
         expect(StripeWrapper::Charge).to receive(:create) { charge }
-        UserSignup.new(invited_user, "fake_token", invite.token)
+        UserSignup.new(user: invited_user,
+                       charge_token: "fake_token",
+                       invite_token: invite.token).signup!
       end
 
       it "the user becomes follower of the inviter" do
@@ -75,7 +81,9 @@ RSpec.describe UserSignup do
     let(:invalid_user) { Fabricate.build(:user, name: "")}
     before do
       expect(StripeWrapper::Charge).not_to receive(:create)
-      UserSignup.new(invalid_user, "fake_token", nil)
+      UserSignup.new(user: invalid_user,
+                     charge_token: "fake_token",
+                     invite_token: nil).signup!
     end
 
     it "does not create the user" do
