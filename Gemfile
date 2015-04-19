@@ -1,5 +1,5 @@
 source 'https://rubygems.org'
-ruby '2.1.0'
+ruby '2.2.0'
 
 gem 'bootstrap-sass'
 gem 'bootstrap_form'
@@ -17,6 +17,7 @@ gem 'foreman'
 gem 'unicorn'
 gem 'carrierwave'
 gem 'fog'
+gem 'draper'
 gem 'mini_magick'
 gem 'stripe'
 

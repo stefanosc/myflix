@@ -21,20 +21,20 @@ class UsersController < ApplicationController
 
   def create
     @user = User.new(user_params)
-    if @user.valid?
-      charge = charge_payment
-      if charge.successful?
-        @user.save
-        handle_invitation
-        AppMailer.delay.welcome_email(@user)
-
-        flash[:success] = "Thank you for signing up ♥︎"
-        redirect_to sign_in_path and return
-      else
-        flash[:danger] = "#{charge.error_message}"
+    signup = UserSignup.new(user: @user,
+                            charge_token: stripe_token,
+                            invite_token: invite_token).signup!
+    if signup.successful?
+      flash[:success] = signup.success_message
+      redirect_to sign_in_path
+    else
+      # validation errors are handled by rails_bootstrap_form
+      if signup.error_message
+        flash.now[:danger] = signup.error_message
       end
+      render :new
     end
-    render :new
+
   end
 
   def show
@@ -50,24 +50,16 @@ class UsersController < ApplicationController
     params.require(:user).permit(:name, :email, :password, :invite_token)
   end
 
+  def stripe_token
+    params[:stripeToken]
+  end
+
+  def invite_token
+    user_params[:invite_token]
+  end
+
   def used_invitation_token?
     User.where(invite_token: params[:invite_token]).present?
-  end
-
-  def handle_invitation
-    if invite = Invite.where(token: user_params[:invite_token]).first
-      @user.followers << invite.inviter
-      invite.inviter.followers << @user
-    end
-  end
-
-  def charge_payment
-    token = params[:stripeToken]
-
-    StripeWrapper::Charge.create(
-      :amount => 999,
-      :card => token
-    )
   end
 
 end
