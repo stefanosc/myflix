@@ -67,6 +67,7 @@ describe UsersController do
       let(:user_attrs) { Fabricate.attributes_for(:user) }
       before do
         expect(UserSignup).to receive(:new) { signup }
+        expect(signup).to receive(:signup!) { signup }
         post :create,  user: user_attrs, stripeToken: "fake_token"
       end
 
@@ -80,19 +81,21 @@ describe UsersController do
         let(:signup) { double('signup', successful?: false, error_message: "some credit card error message") }
         before do
           expect(UserSignup).to receive(:new) { signup }
+          expect(signup).to receive(:signup!) { signup }
           post :create,  user: user_attrs, stripeToken: "fake_token"
         end
 
-        it { is_expected.to set_flash[:danger] }
+        it { is_expected.to set_flash[:danger].now }
       end
-
     end
 
     context "when signup is successful" do
       let(:signup) { double('signup', successful?: true, success_message: "success") }
       let(:user_attrs) { Fabricate.attributes_for(:user) }
+
       before do
         expect(UserSignup).to receive(:new) { signup }
+        expect(signup).to receive(:signup!) { signup }
         post :create,  user: user_attrs, stripeToken: "good_token"
       end
 
@@ -101,12 +104,7 @@ describe UsersController do
       it "redirects to sign_in_path" do
         expect(response).to redirect_to sign_in_path
       end
-
-
     end
-
-
-
   end
 
   describe "GET #show" do

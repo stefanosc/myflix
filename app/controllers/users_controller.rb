@@ -21,14 +21,16 @@ class UsersController < ApplicationController
 
   def create
     @user = User.new(user_params)
-    signup = UserSignup.new(@user, stripe_token, invite_token)
+    signup = UserSignup.new(user: @user,
+                            charge_token: stripe_token,
+                            invite_token: invite_token).signup!
     if signup.successful?
       flash[:success] = signup.success_message
       redirect_to sign_in_path
     else
       # validation errors are handled by rails_bootstrap_form
       if signup.error_message
-        flash[:danger] = signup.error_message
+        flash.now[:danger] = signup.error_message
       end
       render :new
     end
