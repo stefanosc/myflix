@@ -56,13 +56,14 @@ describe UsersController do
         expect(flash[:success]).to be_present
       end
     end
-
   end
 
   describe "POST #create" do
 
     context "when signup fails" do
-      let(:signup) { double('signup', successful?: false, error_message: nil) }
+      let(:signup) { double('signup',
+                             successful?: false,
+                             error_message: "some credit card error message") }
 
       let(:user_attrs) { Fabricate.attributes_for(:user) }
       before do
@@ -72,20 +73,10 @@ describe UsersController do
       end
 
       it { is_expected.to render_template :new }
+      it { is_expected.to set_flash[:danger].now }
 
       it "sets the @user instance" do
         expect(assigns(:user)).to be_instance_of(User)
-      end
-
-      context "when signup sets error_message" do
-        let(:signup) { double('signup', successful?: false, error_message: "some credit card error message") }
-        before do
-          expect(UserSignup).to receive(:new) { signup }
-          expect(signup).to receive(:signup!) { signup }
-          post :create,  user: user_attrs, stripeToken: "fake_token"
-        end
-
-        it { is_expected.to set_flash[:danger].now }
       end
     end
 
