@@ -7,7 +7,7 @@ RSpec.describe UserSignup do
 
     let(:user) { Fabricate.build(:user) }
     before do
-      expect(StripeWrapper::Charge).to receive(:create) { charge }
+      expect(StripeWrapper::Customer).to receive(:create) { charge }
       UserSignup.new(user: user,
                      charge_token: "fake_token",
                      invite_token: nil).signup!
@@ -22,7 +22,7 @@ RSpec.describe UserSignup do
     let(:charge) { double('charge', successful?: true) }
     let(:user) { Fabricate.build(:user) }
     before do
-      expect(StripeWrapper::Charge).to receive(:create) { charge }
+      expect(StripeWrapper::Customer).to receive(:create) { charge }
       UserSignup.new(user: user,
                      charge_token: "fake_token",
                      invite_token: nil).signup!
@@ -35,7 +35,7 @@ RSpec.describe UserSignup do
     context 'sends welcome email' do
       let(:user) { Fabricate.build(:user) }
       before do
-        expect(StripeWrapper::Charge).to receive(:create) { charge }
+        expect(StripeWrapper::Customer).to receive(:create) { charge }
         UserSignup.new(user: user, charge_token: "fake_token", invite_token: nil).signup!
       end
 
@@ -61,7 +61,7 @@ RSpec.describe UserSignup do
                                             email:    invite.invitee_email,
                                             password: "pass") }
       before do
-        expect(StripeWrapper::Charge).to receive(:create) { charge }
+        expect(StripeWrapper::Customer).to receive(:create) { charge }
         UserSignup.new(user: invited_user,
                        charge_token: "fake_token",
                        invite_token: invite.token).signup!

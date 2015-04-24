@@ -46,9 +46,9 @@ class UserSignup
   end
 
   def charge_payment
-    StripeWrapper::Charge.create(
-      :amount => 999,
-      :card => charge_token
+    StripeWrapper::Customer.create(
+      email: user.email,
+      source: charge_token
     )
   end
 
