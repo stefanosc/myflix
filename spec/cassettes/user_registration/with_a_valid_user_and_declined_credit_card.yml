@@ -2,10 +2,10 @@
 http_interactions:
 - request:
     method: post
-    uri: https://api.stripe.com/v1/charges
+    uri: https://api.stripe.com/v1/customers
     body:
       encoding: US-ASCII
-      string: currency=usd&amount=999&card=tok_15gHoWJ1hgInCYPRaTFgl5hO
+      string: source=tok_15vFKUJ1hgInCYPR8jdKi0Yu&plan=basic-plan&email=jacquelyn.johns%40klein.org
     headers:
       Accept:
       - "*/*; q=0.5, application/xml"
@@ -18,12 +18,11 @@ http_interactions:
       Content-Type:
       - application/x-www-form-urlencoded
       X-Stripe-Client-User-Agent:
-      - "{\"bindings_version\":\"1.15.0\",\"lang\":\"ruby\",\"lang_version\":\"2.1.0
-        p0 (2013-12-25)\",\"platform\":\"x86_64-darwin14.0\",\"publisher\":\"stripe\",\"uname\":\"Darwin
-        Mach.local 14.1.0 Darwin Kernel Version 14.1.0: Thu Feb 26 19:26:47 PST 2015;
-        root:xnu-2782.10.73~1/RELEASE_X86_64 x86_64\"}"
+      - '{"bindings_version":"1.15.0","lang":"ruby","lang_version":"2.2.0 p0 (2014-12-25)","platform":"x86_64-darwin14","publisher":"stripe","uname":"Darwin
+        Mach.local 14.3.0 Darwin Kernel Version 14.3.0: Mon Mar 23 11:59:05 PDT 2015;
+        root:xnu-2782.20.48~5/RELEASE_X86_64 x86_64"}'
       Content-Length:
-      - '57'
+      - '85'
   response:
     status:
       code: 402
@@ -32,11 +31,11 @@ http_interactions:
       Server:
       - nginx
       Date:
-      - Sat, 14 Mar 2015 16:08:37 GMT
+      - Fri, 24 Apr 2015 22:31:28 GMT
       Content-Type:
       - application/json
       Content-Length:
-      - '162'
+      - '134'
       Connection:
       - keep-alive
       Access-Control-Allow-Credentials:
@@ -50,7 +49,7 @@ http_interactions:
       Cache-Control:
       - no-cache, no-store
       Request-Id:
-      - req_JTtJv2xLrztRsOF1
+      - req_FYHhValLZbzf3gVt
       Stripe-Version:
       - '2014-08-04'
     body:
@@ -60,10 +59,10 @@ http_interactions:
           "error": {
             "message": "Your card was declined.",
             "type": "card_error",
-            "code": "card_declined",
-            "charge": "ch_15gHoXJ1hgInCYPR6pOiw15N"
+            "param": "",
+            "code": "card_declined"
           }
         }
     http_version: 
-  recorded_at: Sat, 14 Mar 2015 16:08:38 GMT
+  recorded_at: Fri, 24 Apr 2015 22:31:28 GMT
 recorded_with: VCR 2.9.3
