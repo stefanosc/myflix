@@ -72,6 +72,7 @@ RSpec.describe StripeWrapper, type: :model do
           expect(charge).to  be_successful
           expect(charge.response.subscriptions.data.first.plan.id).to  eq('basic-plan')
           expect(charge.response.email).to  eq(user.email)
+          expect(charge.stripe_id).to be_present
         end
       end
 

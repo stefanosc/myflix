@@ -60,6 +60,10 @@ module StripeWrapper
     def error_message
       response.message
     end
+
+    def stripe_id
+      response.id
+    end
   end
 end
 
