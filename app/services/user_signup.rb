@@ -22,6 +22,7 @@ class UserSignup
     if user.valid?
       charge = charge_payment
       if charge.successful?
+        user.stripe_id = charge.stripe_id
         user.save
         handle_invitation
         AppMailer.delay.welcome_email(@user)

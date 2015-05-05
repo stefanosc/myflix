@@ -19,7 +19,7 @@ RSpec.describe UserSignup do
   end
 
   context "with a valid user" do
-    let(:customer) { double('customer', successful?: true) }
+    let(:customer) { double('customer', successful?: true, stripe_id: "stubbed_id") }
     let(:user) { Fabricate.build(:user) }
     before do
       expect(StripeWrapper::Customer).to receive(:create) { customer }
@@ -28,8 +28,12 @@ RSpec.describe UserSignup do
                      invite_token: nil).signup!
     end
 
-    it "it saves the user to the database" do
+    it "saves the user to the database" do
       expect(User.count).to eq(1)
+    end
+
+    it "saves the stripe customer as stripe_id" do
+      expect(User.last.stripe_id).to  eq("stubbed_id")
     end
 
     context 'sends welcome email' do
@@ -53,7 +57,7 @@ RSpec.describe UserSignup do
     end
 
     context "and the user was invited" do
-      let(:customer) { double('customer', successful?: true) }
+      let(:customer) { double('customer', successful?: true, stripe_id: "stubbed_id") }
       let(:inviter) { Fabricate(:user) }
       let(:invite) { Fabricate(:invite, inviter_id: inviter.id) }
       let(:invited_user) { Fabricate.build(:user,
