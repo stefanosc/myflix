@@ -42,6 +42,8 @@ Myflix::Application.routes.draw do
   root to: 'pages#front'
   get 'home', to: 'videos#index'
 
+  mount StripeEvent::Engine, at: '/stripe_events'
+
   require 'sidekiq/web'
   mount Sidekiq::Web, at: '/sidekiq'
 
