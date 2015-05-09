@@ -38,6 +38,16 @@ describe SessionsController do
       end
     end
 
+    context "when user is delinquent" do
+      let(:alice) { Fabricate(:user, delinquent: true) }
+      before do
+        post :create, email: alice.email, password: alice.password
+      end
+
+      it { is_expected.to redirect_to sign_in_path }
+      it { is_expected.to set_flash[:danger] }
+    end
+
     context "when signed in with valid credentials session[:refer]" do
       let(:alice) { Fabricate(:user) }
 

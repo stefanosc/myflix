@@ -7,6 +7,12 @@ class AppMailer < ActionMailer::Base
     mail to: email_with_name, subject: 'Welcome to LoveFlix'
   end
 
+  def failed_payment(user)
+    @user = user
+    email_with_name = "#{@user.name} <#{@user.email}>"
+    mail to: email_with_name, subject: 'LoveFlix subscription payment failed'
+  end
+
   def password_reset(user)
     @user = user
     email_with_name = "#{@user.name} <#{@user.email}>"

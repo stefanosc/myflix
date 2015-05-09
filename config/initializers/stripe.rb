@@ -7,4 +7,10 @@ StripeEvent.configure do |events|
                    amount: event.data.object.amount,
                    stripe_payment_id: event.data.object.id)
   end
+
+  events.subscribe 'charge.failed' do |event|
+    user = User.find_by(stripe_id: event.data.object.customer)
+    user.update_attribute(:delinquent, true)
+    AppMailer.delay.failed_payment(user)
+  end
 end

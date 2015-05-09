@@ -8,10 +8,15 @@ class SessionsController < ApplicationController
   def create
     user = User.find_by_email(params[:email])
     if user && user.authenticate(params[:password])
-      session[:user] = user.id
-      session[:referer] = home_path if session[:referer] == sign_in_path || session[:referer] == root_path || session[:referer] == nil || session[:referer].match(/password_reset/)
-      redirect_to session[:referer], flash: {success: "You have successfully logged in"}
-      session[:referer] = nil
+      if user.delinquent?
+        flash[:danger] = "Your account has been suspended due to a payment failure"
+        redirect_to sign_in_path
+      else
+        session[:user] = user.id
+        session[:referer] = home_path if session[:referer] == sign_in_path || session[:referer] == root_path || session[:referer] == nil || session[:referer].match(/password_reset/)
+        redirect_to session[:referer], flash: {success: "You have successfully logged in"}
+        session[:referer] = nil
+      end
     else
       flash.now[:danger] = "The Email and Password combination you entered does not match"
       render :new
