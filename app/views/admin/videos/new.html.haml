@@ -4,7 +4,7 @@
       .col-md-10.col-md-offset-1
         %ul.nav.nav-tabs
           %li
-            %a(href="#") Recent Payments
-          %li{ class: @video && "active" }
-            %a(href="#") Add a New Video
+            = link_to "Recent Payments", admin_payments_path
+          %li{ class: "active" }
+            = link_to "Add a New Video", "#"
         = @video ? (render 'new_admin_video_form') : (nil)

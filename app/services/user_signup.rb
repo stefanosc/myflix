@@ -22,6 +22,7 @@ class UserSignup
     if user.valid?
       charge = charge_payment
       if charge.successful?
+        user.stripe_id = charge.stripe_id
         user.save
         handle_invitation
         AppMailer.delay.welcome_email(@user)
@@ -46,9 +47,9 @@ class UserSignup
   end
 
   def charge_payment
-    StripeWrapper::Charge.create(
-      :amount => 999,
-      :card => charge_token
+    StripeWrapper::Customer.create(
+      email: user.email,
+      source: charge_token
     )
   end
 

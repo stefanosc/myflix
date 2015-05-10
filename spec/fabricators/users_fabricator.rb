@@ -3,3 +3,7 @@ Fabricator(:user) do
   email { Faker::Internet.email }
   password { Faker::Lorem.characters(10) }
 end
+
+Fabricator(:admin, from: :user) do
+  admin { true }
+end

@@ -3,11 +3,11 @@ require 'spec_helper'
 RSpec.describe UserSignup do
 
   context "with a valid user but declined card" do
-    let(:charge) { double('charge', successful?: false, error_message: "Card declined") }
+    let(:customer) { double('customer', successful?: false, error_message: "Card declined") }
 
     let(:user) { Fabricate.build(:user) }
     before do
-      expect(StripeWrapper::Charge).to receive(:create) { charge }
+      expect(StripeWrapper::Customer).to receive(:create) { customer }
       UserSignup.new(user: user,
                      charge_token: "fake_token",
                      invite_token: nil).signup!
@@ -19,23 +19,27 @@ RSpec.describe UserSignup do
   end
 
   context "with a valid user" do
-    let(:charge) { double('charge', successful?: true) }
+    let(:customer) { double('customer', successful?: true, stripe_id: "stubbed_id") }
     let(:user) { Fabricate.build(:user) }
     before do
-      expect(StripeWrapper::Charge).to receive(:create) { charge }
+      expect(StripeWrapper::Customer).to receive(:create) { customer }
       UserSignup.new(user: user,
                      charge_token: "fake_token",
                      invite_token: nil).signup!
     end
 
-    it "it saves the user to the database" do
+    it "saves the user to the database" do
       expect(User.count).to eq(1)
+    end
+
+    it "saves the stripe customer as stripe_id" do
+      expect(User.last.stripe_id).to  eq("stubbed_id")
     end
 
     context 'sends welcome email' do
       let(:user) { Fabricate.build(:user) }
       before do
-        expect(StripeWrapper::Charge).to receive(:create) { charge }
+        expect(StripeWrapper::Customer).to receive(:create) { customer }
         UserSignup.new(user: user, charge_token: "fake_token", invite_token: nil).signup!
       end
 
@@ -53,7 +57,7 @@ RSpec.describe UserSignup do
     end
 
     context "and the user was invited" do
-      let(:charge) { double('charge', successful?: true) }
+      let(:customer) { double('customer', successful?: true, stripe_id: "stubbed_id") }
       let(:inviter) { Fabricate(:user) }
       let(:invite) { Fabricate(:invite, inviter_id: inviter.id) }
       let(:invited_user) { Fabricate.build(:user,
@@ -61,7 +65,7 @@ RSpec.describe UserSignup do
                                             email:    invite.invitee_email,
                                             password: "pass") }
       before do
-        expect(StripeWrapper::Charge).to receive(:create) { charge }
+        expect(StripeWrapper::Customer).to receive(:create) { customer }
         UserSignup.new(user: invited_user,
                        charge_token: "fake_token",
                        invite_token: invite.token).signup!

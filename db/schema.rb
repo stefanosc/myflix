@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20140817205321) do
+ActiveRecord::Schema.define(version: 20150509194742) do
 
   create_table "categories", force: true do |t|
     t.string   "name"
@@ -38,6 +38,16 @@ ActiveRecord::Schema.define(version: 20140817205321) do
     t.datetime "updated_at"
   end
 
+  create_table "payments", force: true do |t|
+    t.integer  "amount"
+    t.string   "stripe_payment_id"
+    t.integer  "user_id"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "payments", ["user_id"], name: "index_payments_on_user_id"
+
   create_table "queue_items", force: true do |t|
     t.integer  "position"
     t.integer  "video_id"
@@ -61,6 +71,10 @@ ActiveRecord::Schema.define(version: 20140817205321) do
   add_index "reviews", ["user_id"], name: "index_reviews_on_user_id"
   add_index "reviews", ["video_id"], name: "index_reviews_on_video_id"
 
+  create_table "test", id: false, force: true do |t|
+    t.text "name"
+  end
+
   create_table "users", force: true do |t|
     t.string   "name"
     t.string   "email"
@@ -73,6 +87,8 @@ ActiveRecord::Schema.define(version: 20140817205321) do
     t.datetime "password_reset_created_at"
     t.string   "invite_token"
     t.boolean  "admin"
+    t.string   "stripe_id"
+    t.boolean  "delinquent",                default: false
   end
 
   create_table "videos", force: true do |t|

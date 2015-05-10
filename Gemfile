@@ -20,6 +20,7 @@ gem 'fog'
 gem 'draper'
 gem 'mini_magick'
 gem 'stripe'
+gem 'stripe_event'
 
 group :development do
   gem 'sqlite3'
