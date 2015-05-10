@@ -13,7 +13,10 @@ class SessionsController < ApplicationController
         redirect_to sign_in_path
       else
         session[:user] = user.id
-        session[:referer] = home_path if session[:referer] == sign_in_path || session[:referer] == root_path || session[:referer] == nil || session[:referer].match(/password_reset/)
+        case session[:referer]
+        when sign_in_path, root_path, nil, /password_reset/
+          session[:referer] = home_path
+        end
         redirect_to session[:referer], flash: {success: "You have successfully logged in"}
         session[:referer] = nil
       end
